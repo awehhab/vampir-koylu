@@ -466,13 +466,17 @@ function RoleBookButton({roles}){
 }
 
 // ── ROLE COUNT BADGE ──────────────────────────────────────────────────────────
-function RoleCountBadge({players,isHost,roles}){
+function RoleCountBadge({players,isHost,roles,secretRoleMode}){
   const[open,setOpen]=useState(false);
   // Tüm oyuncular (host hariç) — ölüler dahil, başlangıç rol sayıları sabit kalır
   const allNonHost=players.filter(p=>!p.isHost);
   const roleCounts=allNonHost.reduce((acc,p)=>{const baseRol=p.baslangicRol||p.rol;const rid=baseRol?.id||"?";const rad=baseRol?.ad||"?";acc[rid]=acc[rid]||{ad:rad,emoji:baseRol?.emoji||"❓",renk:baseRol?.renk||T.accent,count:0};acc[rid].count++;return acc;},{});
   // Rol sırasını ROLE_BADGE_ORDER'a göre sırala (rol kullanma sırası)
   const sortedRoles=Object.entries(roleCounts).sort(([a],[b])=>{const ai=ROLE_BADGE_ORDER.indexOf(a);const bi=ROLE_BADGE_ORDER.indexOf(b);if(ai===-1&&bi===-1)return 0;if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;}).map(([,v])=>v);
+  // Gizli Rol Modu aktifse rol dağılımını tek bir "Gizli Rol" satırına indir — hangi rolden kaç tane olduğu belli olmasın
+  const displayRoles=secretRoleMode
+    ?(allNonHost.length>0?[{ad:"Gizli Rol",emoji:"❓",renk:T.accent,count:allNonHost.length}]:[])
+    :sortedRoles;
   return <>
     <button onClick={()=>setOpen(o=>!o)} style={{background:T.accentDim,border:`1px solid ${T.accentBorder}`,borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:16,color:T.accent}} title="Rol Sayıları">🎭</button>
     {open&&<div onClick={()=>setOpen(false)} style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"flex-start",justifyContent:"flex-end",paddingTop:70,paddingRight:16}}>
@@ -481,13 +485,13 @@ function RoleCountBadge({players,isHost,roles}){
           <span style={{fontFamily:"'IM Fell English',serif",color:T.accent,fontSize:14,letterSpacing:2}}>Rol Sayıları</span>
           <Btn variant="icon" onClick={()=>setOpen(false)} ariaLabel="Kapat" style={{padding:"4px"}}>✕</Btn>
         </div>
-        <p style={{fontSize:11,color:T.textMuted,marginBottom:T.s12}}>Rol sayıları oyun başındaki ayara göre sabittir.</p>
-        {sortedRoles.map(r=><div key={r.ad} style={{display:"flex",alignItems:"center",gap:T.s8,padding:`${T.s8} ${T.s12}`,background:"rgba(255,255,255,0.03)",borderRadius:T.md,marginBottom:T.s4,border:`1px solid ${r.renk}33`}}>
+        <p style={{fontSize:11,color:T.textMuted,marginBottom:T.s12}}>{secretRoleMode?"🕵️ Gizli Rol Modu aktif: roller oyun sonuna kadar gizli kalır.":"Rol sayıları oyun başındaki ayara göre sabittir."}</p>
+        {displayRoles.map(r=><div key={r.ad} style={{display:"flex",alignItems:"center",gap:T.s8,padding:`${T.s8} ${T.s12}`,background:"rgba(255,255,255,0.03)",borderRadius:T.md,marginBottom:T.s4,border:`1px solid ${r.renk}33`}}>
           <span style={{fontSize:18}}>{r.emoji}</span>
           <span style={{flex:1,fontWeight:700,fontSize:13,color:T.textPrimary}}>{r.ad}</span>
           <span style={{fontFamily:"'Uncial Antiqua',serif",fontSize:16,color:r.renk,fontWeight:700}}>{r.count}</span>
         </div>)}
-        {sortedRoles.length===0&&<p style={{fontSize:12,color:T.textMuted,textAlign:"center"}}>Henüz oyuncu yok.</p>}
+        {displayRoles.length===0&&<p style={{fontSize:12,color:T.textMuted,textAlign:"center"}}>Henüz oyuncu yok.</p>}
       </div>
     </div>}
   </>;
@@ -2504,7 +2508,7 @@ function LastWordsInput({name,lobbyCode,fb,onSent}){
 }
 
 // ── GAME SCREEN ───────────────────────────────────────────────────────────────
-function GameScreen({players:initP,nightOrder,roles,onEnd,onPhaseChange,isHost,lobbyCode,myName,isSpectator,fb,onNewGame}){
+function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhaseChange,isHost,lobbyCode,myName,isSpectator,fb,onNewGame}){
   useWakeLock();useMobileKeyboardFix();
   const[players,setPlayers]=useState(initP);
   const[phase,setPhase]=useState("gündüz");
@@ -3505,6 +3509,7 @@ function GameScreen({players:initP,nightOrder,roles,onEnd,onPhaseChange,isHost,l
           <Tag color={T.success}>{alive.length} canlı</Tag>
           {dead.length>0&&<Tag color={T.danger}>{dead.length} ölü</Tag>}
           <Tag color={T.textMuted}>#{lobbyCode}</Tag>
+          {secretRoleMode&&<Tag color={T.accent}>🕵️ Gizli Rol Modu</Tag>}
         </div>
         <div style={{display:"flex",gap:T.s8,alignItems:"center"}}>
           <Btn variant="accent" onClick={()=>setShowRoles(true)} style={{gap:T.s4,fontSize:12}}>📖 Roller</Btn>
@@ -3619,6 +3624,7 @@ function GameScreen({players:initP,nightOrder,roles,onEnd,onPhaseChange,isHost,l
         <Tag color={T.success}>{alive.length} canlı</Tag>
         {dead.length>0&&<Tag color={T.danger}>{dead.length} ölü</Tag>}
         <Tag color={T.textMuted}>#{lobbyCode}</Tag>
+        {secretRoleMode&&<Tag color={T.accent}>🕵️ Gizli Rol Modu</Tag>}
       </div>
       <div style={{display:"flex",gap:T.s8,alignItems:"center"}}>
         {isHost&&<Btn variant="accent" onClick={()=>setShowRoles(true)} style={{gap:T.s4,fontSize:12}}>📖 Roller</Btn>}
@@ -3840,6 +3846,7 @@ function SetupWaitingScreen({lobbyCode,myName}){
   const[tick,setTick]=useState(0);
   const[dots,setDots]=useState(".");
   const[playerCount,setPlayerCount]=useState(0);
+  const[secretRoleMode,setSecretRoleMode]=useState(false);
 
   // Rol dağılımını Firebase'den anlık dinle
   useEffect(()=>{
@@ -3847,6 +3854,16 @@ function SetupWaitingScreen({lobbyCode,myName}){
     const rcRef=fb.ref(fb.db,`lobbies/${lobbyCode}/setupCounts`);
     const unsub=fb.onValue(rcRef,(snap)=>{
       setRoleCounts(snap.val()||{});
+    });
+    return()=>unsub();
+  },[fb,lobbyCode]);
+
+  // Gizli Rol Modu durumunu Firebase'den anlık dinle
+  useEffect(()=>{
+    if(!fb||!lobbyCode)return;
+    const srmRef=fb.ref(fb.db,`lobbies/${lobbyCode}/setupSecretRoleMode`);
+    const unsub=fb.onValue(srmRef,(snap)=>{
+      setSecretRoleMode(!!snap.val());
     });
     return()=>unsub();
   },[fb,lobbyCode]);
@@ -3926,6 +3943,11 @@ function SetupWaitingScreen({lobbyCode,myName}){
       </div>
       <p style={{color:T.textMuted,fontSize:13,marginBottom:T.s24}}>Roller atanıyor, birazdan başlıyorsunuz!</p>
 
+      {secretRoleMode&&<div style={{display:"flex",alignItems:"center",gap:T.s8,justifyContent:"center",background:"rgba(167,139,250,0.08)",border:`1px solid ${T.accentBorder}`,borderRadius:T.md,padding:`${T.s8} ${T.s12}`,marginBottom:T.s16}}>
+        <span style={{fontSize:14}}>🕵️</span>
+        <span style={{fontSize:12,color:T.accent,fontWeight:700}}>Gizli Rol Modu aktif. Roller sana da gösterilmeyecek</span>
+      </div>}
+
       {/* Rol dağılımı — anlık */}
       {totalAssigned>0&&<div style={{background:"rgba(255,255,255,0.04)",borderRadius:T.lg,border:`1px solid ${T.border}`,padding:`${T.s12} ${T.s16}`,marginBottom:T.s16,textAlign:"left"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:T.s12}}>
@@ -3938,19 +3960,27 @@ function SetupWaitingScreen({lobbyCode,myName}){
         <div style={{height:4,background:"rgba(255,255,255,0.06)",borderRadius:4,marginBottom:T.s12,overflow:"hidden"}}>
           <div style={{height:"100%",width:`${progress}%`,background:`linear-gradient(90deg,${T.accent},${T.primary})`,borderRadius:4,transition:"width 0.4s ease"}}/>
         </div>
-        <div style={{display:"flex",flexDirection:"column",gap:T.s6}}>
-          {assignedRoles.map(r=>{
-            const cnt=roleCounts[r.id]||0;
-            return <div key={r.id} style={{display:"flex",alignItems:"center",gap:T.s8,animation:"fadeUp 300ms ease-out"}}>
-              <span style={{fontSize:16,flexShrink:0}}>{r.emoji}</span>
-              <span style={{flex:1,color:T.textPrimary,fontSize:13,fontWeight:600}}>{r.ad}</span>
-              <div style={{display:"flex",gap:3}}>
-                {Array.from({length:cnt}).map((_,i)=><div key={i} style={{width:18,height:18,borderRadius:4,background:r.renk+"22",border:`1px solid ${r.renk}55`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:r.renk,fontWeight:700}}>✓</div>)}
-              </div>
-            </div>;
-          })}
-        </div>
-        {assignedRoles.length===0&&<p style={{fontSize:12,color:T.textMuted,textAlign:"center"}}>Kurucu henüz rol seçmedi...</p>}
+        {secretRoleMode
+          ?<div style={{display:"flex",alignItems:"center",gap:T.s8}}>
+            <span style={{fontSize:16,flexShrink:0}}>❓</span>
+            <span style={{flex:1,color:T.textPrimary,fontSize:13,fontWeight:600}}>Gizli Rol</span>
+            <div style={{display:"flex",gap:3,flexWrap:"wrap",maxWidth:120,justifyContent:"flex-end"}}>
+              {Array.from({length:totalAssigned}).map((_,i)=><div key={i} style={{width:18,height:18,borderRadius:4,background:T.accent+"22",border:`1px solid ${T.accent}55`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:T.accent,fontWeight:700}}>✓</div>)}
+            </div>
+          </div>
+          :<div style={{display:"flex",flexDirection:"column",gap:T.s6}}>
+            {assignedRoles.map(r=>{
+              const cnt=roleCounts[r.id]||0;
+              return <div key={r.id} style={{display:"flex",alignItems:"center",gap:T.s8,animation:"fadeUp 300ms ease-out"}}>
+                <span style={{fontSize:16,flexShrink:0}}>{r.emoji}</span>
+                <span style={{flex:1,color:T.textPrimary,fontSize:13,fontWeight:600}}>{r.ad}</span>
+                <div style={{display:"flex",gap:3}}>
+                  {Array.from({length:cnt}).map((_,i)=><div key={i} style={{width:18,height:18,borderRadius:4,background:r.renk+"22",border:`1px solid ${r.renk}55`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:r.renk,fontWeight:700}}>✓</div>)}
+                </div>
+              </div>;
+            })}
+          </div>}
+        {!secretRoleMode&&assignedRoles.length===0&&<p style={{fontSize:12,color:T.textMuted,textAlign:"center"}}>Kurucu henüz rol seçmedi...</p>}
       </div>}
 
       {totalAssigned===0&&<div style={{background:T.accentDim,border:`1px solid ${T.accentBorder}`,borderRadius:T.md,padding:T.s12,marginBottom:T.s16}}>
@@ -3972,7 +4002,13 @@ function SetupScreen({onStart,roleLibrary,lobbyPlayers,lobbyCode}){
   const[tab,setTab]=useState("roller");
   const[nightOrder,setNightOrder]=useState(DEFAULT_ORDER);
   const[dragIdx,setDragIdx]=useState(null);
+  const[secretRoleMode,setSecretRoleMode]=useState(false);
   const fb=useFB();
+
+  // Gizli Rol Modu değiştikçe Firebase'e anlık yaz (lobideki oyuncular kurulum sırasında da görebilsin)
+  useEffect(()=>{
+    if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/setupSecretRoleMode`),secretRoleMode);
+  },[secretRoleMode,fb,lobbyCode]);
   const names=lobbyPlayers.filter(p=>!p.isHost).map(p=>p.name);
   const total=Object.values(counts).reduce((a,b)=>a+b,0);
   const ok=names.length>=2&&total===names.length;
@@ -4015,13 +4051,24 @@ function SetupScreen({onStart,roleLibrary,lobbyPlayers,lobbyCode}){
     roleLibrary.forEach(r=>{for(let i=0;i<(counts[r.id]||0);i++)pool.push(r);});
     onStart(
       shuffled.map((name,i)=>({id:i,ad:name,rol:pool[i],baslangicRol:pool[i],durum:"canlı",abilityUses:Object.fromEntries((pool[i]?.abilities||[]).map(a=>[a.id,a.kullanim])),oySayisi:1,kimlikAcik:false})),
-      nightOrder
+      nightOrder,
+      secretRoleMode
     );
   };
 
   return <div className="enter" style={{padding:`${T.s24} ${T.s16}`,maxWidth:700,margin:"0 auto"}}>
     <GlassCard style={{padding:`${T.s12} ${T.s16}`,marginBottom:T.s16,background:"rgba(167,139,250,0.08)",border:`1px solid ${T.accentBorder}`}}>
       <p style={{fontSize:12,color:T.accent}}>👑 Yönetici oyun dışındadır. Sadece oyuncular role atanır.</p>
+    </GlassCard>
+    <GlassCard onClick={()=>setSecretRoleMode(s=>!s)} style={{padding:`${T.s12} ${T.s16}`,marginBottom:T.s16,cursor:"pointer",display:"flex",alignItems:"center",gap:T.s12,background:secretRoleMode?"rgba(167,139,250,0.12)":"rgba(255,255,255,0.03)",border:`1px solid ${secretRoleMode?T.accentBorder:T.border}`,transition:`all ${T.base}`}}>
+      <span style={{fontSize:24,flexShrink:0}}>🕵️</span>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontWeight:700,color:secretRoleMode?T.accent:T.textPrimary,fontSize:14}}>Gizli Rol Modu</div>
+        <div style={{fontSize:11,color:T.textMuted,marginTop:2,lineHeight:1.5}}>Açıksa, eklediğin roller oyun boyunca rol listesinde herkesten (senden dahil rol listesi panelinde) gizlenir. Oyunun akışı ve asılanların rol açıklaması normal şekilde devam eder.</div>
+      </div>
+      <div style={{flexShrink:0,width:44,height:26,borderRadius:20,background:secretRoleMode?T.accent:"rgba(255,255,255,0.12)",position:"relative",transition:`background ${T.base}`}}>
+        <div style={{position:"absolute",top:3,left:secretRoleMode?21:3,width:20,height:20,borderRadius:"50%",background:"#fff",transition:`left ${T.base}`,boxShadow:"0 1px 3px rgba(0,0,0,0.4)"}}/>
+      </div>
     </GlassCard>
     <div style={{display:"flex",gap:T.s8,marginBottom:T.s24}}>
       {[["oyuncular","👥 Oyuncular"],["roller","🎭 Roller"],["sira","🌙 Gece Sırası"]].map(([t,label])=><button key={t} onClick={()=>setTab(t)} style={{flex:1,padding:`${T.s12} 0`,borderRadius:T.md,cursor:"pointer",background:tab===t?T.primaryDim:T.surface,color:tab===t?T.primary:T.textMuted,border:`1px solid ${tab===t?T.primaryBorder:T.border}`,fontWeight:700,fontSize:12,transition:`all ${T.base}`}}>{label}</button>)}
@@ -4090,7 +4137,7 @@ function SetupScreen({onStart,roleLibrary,lobbyPlayers,lobbyCode}){
         </div>}
     </GlassCard>}
 
-    <Btn variant="primary" onClick={start} disabled={!ok} style={{marginTop:T.s16,width:"100%",justifyContent:"center",gap:T.s8,padding:"15px 0",borderRadius:T.lg,fontSize:15}}>🔀 Rolleri Karıştır ve Oyunu Başlat</Btn>
+    <Btn variant="primary" onClick={start} disabled={!ok} style={{marginTop:T.s16,width:"100%",justifyContent:"center",gap:T.s8,padding:"15px 0",borderRadius:T.lg,fontSize:15}}>🔀 Rolleri Karıştır ve Oyunu Başlat{secretRoleMode?" (Gizli Rol)":""}</Btn>
     {!ok&&names.length>0&&<p style={{textAlign:"center",fontSize:11,color:T.textMuted,marginTop:T.s8}}>{total!==names.length?`Rol (${total}) ve oyuncu (${names.length}) sayısı eşleşmeli`:"En az 2 oyuncu gerekli"}</p>}
   </div>;
 }
@@ -4103,6 +4150,7 @@ function App(){
   const[lobbyPlayers,setLobbyPlayers]=useState([]);
   const[spectators,setSpectators]=useState([]);
   const[gamePlayers,setGamePlayers]=useState([]);
+  const[gameSecretRoleMode,setGameSecretRoleMode]=useState(false);
   const[roleLibrary]=useState(DEFAULT_ROLES);
   const[bgPhase,setBgPhase]=useState("gündüz");
   const[anim,setAnim]=useState(true);
@@ -4210,6 +4258,18 @@ function App(){
     return()=>unsub();
   },[session,fbReady]);
 
+  // Gizli Rol Modu — herkes (host dahil, sayfa yenilense bile) doğru değeri görsün diye Firebase'den senkronize edilir
+  useEffect(()=>{
+    if(!session||!fbReady||!window.__FB)return;
+    const fb2=window.__FB;
+    const secretRef=fb2.ref(fb2.db,`lobbies/${session.lobbyCode}/game/secretRoleMode`);
+    const unsub=fb2.onValue(secretRef,(snap)=>{
+      const d=snap.val();
+      setGameSecretRoleMode(!!d);
+    });
+    return()=>unsub();
+  },[session,fbReady]);
+
   const handleStartSetup=async()=>{
     if(!session||!fbReady||!window.__FB)return;
     const fb2=window.__FB;
@@ -4219,12 +4279,13 @@ function App(){
 
   const[gameNightOrder,setGameNightOrder]=useState(DEFAULT_ORDER);
 
-  const handleGameStart=async(players,nightOrder)=>{
+  const handleGameStart=async(players,nightOrder,secretRoleMode)=>{
     if(!session||!fbReady||!window.__FB)return;
     const fb2=window.__FB;
     const order=nightOrder||DEFAULT_ORDER;
     setGameNightOrder(order);
-    await fb2.set(fb2.ref(fb2.db,`lobbies/${session.lobbyCode}/game`),{players,phase:"gündüz",round:1,nightOrder:order});
+    setGameSecretRoleMode(!!secretRoleMode);
+    await fb2.set(fb2.ref(fb2.db,`lobbies/${session.lobbyCode}/game`),{players,phase:"gündüz",round:1,nightOrder:order,secretRoleMode:!!secretRoleMode});
     await fb2.set(fb2.ref(fb2.db,`lobbies/${session.lobbyCode}/status`),"playing");
     setGamePlayers(players);
     go("game");
@@ -4309,7 +4370,7 @@ function App(){
           <LuminaLogo size="sm"/>
         </div>
         {session&&<div style={{display:"flex",gap:T.s8,alignItems:"center",flexWrap:"wrap"}}>
-          {screen==="game"&&<RoleCountBadge players={gamePlayers.filter(p=>!p.isHost)} isHost={session.isHost} roles={roleLibrary}/>}
+          {screen==="game"&&<RoleCountBadge players={gamePlayers.filter(p=>!p.isHost)} isHost={session.isHost} roles={roleLibrary} secretRoleMode={gameSecretRoleMode}/>}
           {screen==="game"&&<RoleBookButton roles={roleLibrary}/>}
           <Tag color={T.accent} size="sm">#{session.lobbyCode}</Tag>
           <Tag color={session.isHost?T.primary:session.isSpectator?T.accent:T.textMuted} size="sm">
@@ -4321,7 +4382,7 @@ function App(){
       {screen==="lobby"&&session&&<LobbyWaiting lobbyCode={session.lobbyCode} players={lobbyPlayers} spectators={spectators} isHost={session.isHost} myName={session.myName} onStartSetup={handleStartSetup}/>}
       {screen==="setup"&&session?.isHost&&<SetupScreen onStart={handleGameStart} roleLibrary={roleLibrary} lobbyPlayers={lobbyPlayers} lobbyCode={session.lobbyCode}/>}
       {screen==="setup"&&!session?.isHost&&<SetupWaitingScreen lobbyCode={session?.lobbyCode} myName={session?.myName}/>}
-      {screen==="game"&&session&&<GameScreen players={gamePlayers} nightOrder={gameNightOrder} roles={roleLibrary} onEnd={handleEnd} onNewGame={handleNewGame} onPhaseChange={setBgPhase} isHost={session.isHost} lobbyCode={session.lobbyCode} myName={session.myName} isSpectator={session.isSpectator} fb={window.__FB}/>}
+      {screen==="game"&&session&&<GameScreen players={gamePlayers} nightOrder={gameNightOrder} secretRoleMode={gameSecretRoleMode} roles={roleLibrary} onEnd={handleEnd} onNewGame={handleNewGame} onPhaseChange={setBgPhase} isHost={session.isHost} lobbyCode={session.lobbyCode} myName={session.myName} isSpectator={session.isSpectator} fb={window.__FB}/>}
       {screen==="replay"&&<ReplayScreen lobbyCode={session?.lobbyCode} replayData={replayData} onBack={()=>{saveSession(null);setSession(null);setReplayData(null);go("join");}}/>}
       <footer style={{textAlign:"center",padding:`${T.s16} 0 ${T.s24}`,borderTop:"1px solid rgba(255,255,255,0.04)"}}><span style={{fontSize:12,color:"rgba(167,139,250,0.5)"}}>discord.gg/lumina • Lumina Vampir Köylü</span></footer>
     </div>
