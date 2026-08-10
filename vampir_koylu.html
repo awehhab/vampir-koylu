@@ -79,15 +79,15 @@ const DEF_T={none:"Savunmasız",standard:"Standart Savunma",ultimate:"Mutlak Sav
 const STATUS={canlı:{label:"Canlı",color:"#27ae60"},ölü:{label:"Ölü",color:"#e74c3c"},izleyici:{label:"İzleyici",color:"#a78bfa"}};
 const DEFAULT_ROLES=[
   {id:"vampir",ad:"Vampir",takim:"karanlık",renk:"#c0392b",emoji:"🧛",aciklama:"Her gece takımıyla beraber birini öldürebilir. Doktor korumasını aşamaz. Escort tarafından engellenebilir. Seri katili öldüremez.",killType:"standard",defType:"none",abilities:[{id:"a1",ad:"Öldür",tip:"kill",kullanim:-1,oneTime:false}],canTargetSameTeam:false},
-  {id:"kabus_vampir",ad:"Kabus Vampir",takim:"karanlık",renk:"#8e1c0f",emoji:"😈",aciklama:"O gece gittiği kişinin rolünü kullanmasını engeller. Normal vampir öldüyse ya rol kullanmayı engeller ya da öldürür. Escort tarafından engellenebilir.",killType:"standard",defType:"none",abilities:[{id:"kv1",ad:"Kabus Ver",tip:"kabus_block",kullanim:-1,oneTime:false},{id:"kv2",ad:"Öldür",tip:"kill",kullanim:-1,oneTime:false,requiresVampirDead:true}],canTargetSameTeam:false,isDualAbility:true},
-  {id:"gozcu_vampir",ad:"Gözcü Vampir",takim:"karanlık",renk:"#a93226",emoji:"🩸",aciklama:"Her gece birisinin rolüne bakabilir. Normal vampir öldüyse ya birisinin rolünü öğrenir ya da öldürür.",killType:"standard",defType:"none",abilities:[{id:"gv1",ad:"Rol Gör",tip:"reveal",kullanim:-1,oneTime:false},{id:"gv2",ad:"Öldür",tip:"kill",kullanim:-1,oneTime:false,requiresVampirDead:true}],canTargetSameTeam:false,isDualAbility:true},
+  {id:"kabus_vampir",ad:"Kabus Vampir",takim:"karanlık",renk:"#8e1c0f",emoji:"😈",aciklama:"O gece gittiği kişinin rolünü kullanmasını engeller. Normal Vampir öldüğünde öldürme yetkisi ÖNCELİKLE Kabus Vampir'e geçer (ya rol kullanmayı engeller ya da öldürür). Escort tarafından engellenebilir.",killType:"standard",defType:"none",abilities:[{id:"kv1",ad:"Kabus Ver",tip:"kabus_block",kullanim:-1,oneTime:false},{id:"kv2",ad:"Öldür",tip:"kill",kullanim:-1,oneTime:false,requiresVampirDead:true}],canTargetSameTeam:false,isDualAbility:true},
+  {id:"gozcu_vampir",ad:"Gözcü Vampir",takim:"karanlık",renk:"#a93226",emoji:"🩸",aciklama:"Her gece birisinin rolüne bakabilir. Öldürme yeteneği Normal Vampir öldüğünde HEMEN açılmaz — önce Kabus Vampir'e geçer; ancak Kabus Vampir de ölürse (veya oyunda yoksa) Gözcü Vampir'in öldür kilidi açılır.",killType:"standard",defType:"none",abilities:[{id:"gv1",ad:"Rol Gör",tip:"reveal",kullanim:-1,oneTime:false},{id:"gv2",ad:"Öldür",tip:"kill",kullanim:-1,oneTime:false,requiresVampirDead:true}],canTargetSameTeam:false,isDualAbility:true},
   {id:"hirsiz",ad:"Hırsız",takim:"nötr",renk:"#7f8c8d",emoji:"🦝",aciklama:"İstediği birisini bir kereliğine öldürebilir. Öldürdüğü kişinin rolüne bürünür. Birisini öldürene kadar tarafsızdır.",killType:"ultimate",defType:"none",abilities:[{id:"h1",ad:"Çal ve Öldür",tip:"kill",kullanim:1,oneTime:true}],canTargetSameTeam:true},
   {id:"seri_katil",ad:"Seri Katil",takim:"nötr",renk:"#c0392b",emoji:"🔪",aciklama:"Her gece istediği birini öldürebilir. Tarafsızdır. Doktor koruması işlemez. Escort ve Kabus Vampir tarafından engellenebilir. Vampirler tarafından öldürülemez. Hırsız tarafından öldürülebilir.",killType:"ultimate",defType:"standard",abilities:[{id:"sk1",ad:"Öldür",tip:"kill",kullanim:-1,oneTime:false}],canTargetSameTeam:true,isSerialKiller:true},
   {id:"koylu",ad:"Köylü",takim:"iyi",renk:"#27ae60",emoji:"🧑‍🌾",aciklama:"Özel yeteneği yok. Gündüzleri köy halkıyla tartışarak vampirlerin kim olduğunu bulmaya çalışır ve oy birliğiyle onu köyden atarlar.",killType:null,defType:"none",abilities:[],canTargetSameTeam:true},
   {id:"doktor",ad:"Doktor",takim:"iyi",renk:"#16a085",emoji:"⚕️",aciklama:"Her gece bir kişiyi (veya kendini) arka arkaya en fazla 2 gece boyunca koruyabilir. Aynı kişiyi üst üste 2'den fazla gece seçemez. 3. gecede farklı birine geçmek zorundadır. Kendini de üst üste en fazla 2 gece koruyabilir. Cadının iksiri ve şerifin mermisini durduramaz. Escort ve Kabus Vampir tarafından engellenebilir.",killType:null,defType:"standard",abilities:[{id:"a3",ad:"Koru",tip:"protect",kullanim:-1,oneTime:false}],canTargetSameTeam:true},
   {id:"serif",ad:"Şerif",takim:"iyi",renk:"#e67e22",emoji:"🤠",aciklama:"Gece kullanabileceği 2 mermisi olur. Her gece 1 tane olmak üzere mermilerini kullanabilir. Mermisini kullandığı kişi köy tarafındansa ikisi de ölür. Mermisini kullandığı kişi köy halkından değilse sadece vurduğu kişi ölür. Escort ve Kabus Vampir tarafından engellenebilir.",killType:"standard",defType:"none",abilities:[{id:"a8",ad:"Ateş Et",tip:"sheriff_shoot",kullanim:2,oneTime:false}],canTargetSameTeam:true},
   {id:"geveze",ad:"Geveze",takim:"iyi",renk:"#3498db",emoji:"🗣️",aciklama:"Oyun boyunca 1 kereliğine istediği kişinin rolünü herkese açıklar. Kendi kimliği gizli kalır. Escort ve Kabus Vampir tarafından engellenebilir. Sadece 1 kişinin rolünü açığa çıkarabilir.",killType:null,defType:"none",abilities:[{id:"a10",ad:"Rol Gör",tip:"reveal",kullanim:1,oneTime:true}],canTargetSameTeam:true},
-  {id:"rahip",ad:"Rahip",takim:"iyi",renk:"#9b59b6",emoji:"⛪",aciklama:"Oyun boyu 1 kereliğine ölülerden birisini hayata döndürebilir. İyi veya kötü role bakmaksızın ölüleri diriltebilir. Hakkı bittikten sonra bir daha kimseyi kaldıramaz. Escort ve Kabus Vampir tarafından engellenebilir.",killType:null,defType:"none",abilities:[{id:"a9",ad:"Dirilt",tip:"revive",kullanim:1,oneTime:true}],canTargetSameTeam:true},
+  {id:"rahip",ad:"Rahip",takim:"iyi",renk:"#9b59b6",emoji:"⛪",aciklama:"Oyun boyu 1 kereliğine ölülerden birisini hayata döndürebilir. Gece ölen birini iyi/kötü fark etmeksizin diriltebilir. Ancak sabah oylamasıyla idam edilen birini sadece rolü iyiyse diriltebilir; idam edilen kötü rollü birini kaldıramaz. Hakkı bittikten sonra bir daha kimseyi kaldıramaz. Escort ve Kabus Vampir tarafından engellenebilir.",killType:null,defType:"none",abilities:[{id:"a9",ad:"Dirilt",tip:"revive",kullanim:1,oneTime:true}],canTargetSameTeam:true},
   {id:"kadin",ad:"Cadı",takim:"iyi",renk:"#d35400",emoji:"🧙‍♀️",aciklama:"Koruma, Öldürme, Rol bakma olmak üzere 3 iksiri bulunur. Her gece bu iksirlerden sadece bir tanesini kullanabilir. Koru büyüsünü kullanırsa seçtiği kişi (kendisi dahil) korunur ve biter. Öldür iksirini kullanırsa seçtiği kişi (seri katil dahil) ölür, doktor kurtaramaz. Rol bak iksirinde seçtiği kişinin rolunu görebilir. Escort ve Kabus Vampir tarafından engellenebilir.",killType:"ultimate",defType:"none",abilities:[{id:"a4",ad:"Rol Bak İksiri",tip:"reveal",kullanim:1,oneTime:true},{id:"a5",ad:"Öldür İksiri",tip:"witch_kill",kullanim:1,oneTime:true},{id:"a6",ad:"Koru İksiri",tip:"witch_protect",kullanim:1,oneTime:true}],canTargetSameTeam:true,isWitch:true},
   {id:"gozcu",ad:"Gözcü",takim:"iyi",renk:"#1abc9c",emoji:"👁️",aciklama:"Her gece istediği birinin rolüne bakabilir. Escort ve Kabus Vampir tarafından engellenebilir.",killType:null,defType:"none",abilities:[{id:"a11",ad:"İzle",tip:"reveal",kullanim:-1,oneTime:false}],canTargetSameTeam:true},
   {id:"escort",ad:"Escort",takim:"iyi",renk:"#e91e8c",emoji:"👮",aciklama:"O gece gittiği kişinin rol yeteneğini kullanmasını engeller.",killType:null,defType:"none",abilities:[{id:"e1",ad:"Engelle",tip:"kabus_block",kullanim:-1,oneTime:false}],canTargetSameTeam:true},
@@ -98,6 +98,27 @@ const CANONICAL_NIGHT_ORDER=[
   "geveze","rahip","hirsiz","escort","kabus_vampir","serif","kadin","gozcu","gozcu_vampir","doktor","seri_katil","vampir","baskan"
 ];
 const DEFAULT_ORDER=["geveze","rahip","hirsiz","escort","kabus_vampir","serif","kadin","gozcu","gozcu_vampir","doktor","seri_katil","vampir","baskan"];
+// Normal Vampir öldüğünde "Öldür" yeteneği açılan ikincil vampir rolleri (Kabus Vampir, Gözcü Vampir).
+// Öncelik sırası SABİTTİR: Normal Vampir ölünce öldürme yetkisi ÖNCE Kabus Vampir'e geçer.
+// Gözcü Vampir'in öldür kilidi ancak Kabus Vampir de ölürse açılır (Kabus Vampir oyunda hiç yoksa istisna, aşağıya bak).
+const DUAL_VAMPIR_KILL_ROLES=["kabus_vampir","gozcu_vampir"];
+const DUAL_VAMPIR_KILL_PRIORITY=["kabus_vampir","gozcu_vampir"];
+// Belirtilen ikincil vampir rolü için "Öldür" yeteneğinin kilidi açık mı? Öncelik sırasına göre hesaplar:
+// 1) Normal Vampir ölmeden hiçbiri açılmaz.
+// 2) Normal Vampir ölünce sıradaki ilk canlı öncelikli rol (Kabus Vampir) açılır.
+// 3) O rol oyunda yoksa VEYA o rol de ölmüşse, kilit bir sonraki öncelikli role (Gözcü Vampir) geçer.
+function isDualVampirKillUnlocked(roleId,players){
+  const vampirAlive=players.some(p=>p.rol?.id==="vampir"&&p.durum==="canlı");
+  if(vampirAlive)return false; // Normal Vampir hayattayken hiçbiri açılmaz
+  for(const rid of DUAL_VAMPIR_KILL_PRIORITY){
+    const inGame=players.some(p=>p.rol?.id===rid);
+    if(!inGame)continue; // bu rol oyunda yoksa sırayı atla, bir sonrakine bak
+    const alive=players.some(p=>p.rol?.id===rid&&p.durum==="canlı");
+    if(alive)return rid===roleId; // sıradaki canlı öncelikli rol kimse kilit ona açık
+    // bu öncelikli rol öldü → sıradaki role geç
+  }
+  return false;
+}
 const LOBBY_PASSWORD_PATH="config/lobbyPassword";
 const DEFAULT_LOBBY_PASSWORD="vehhabköylü";
 
@@ -114,6 +135,44 @@ function isEffectivelyBlocked(actorId,roleId,tip,actionsSoFar){
   if(rolDef?.killType==="ultimate")return false; // Seri Katil, Cadı vb. mutlak roller engellenemez
   if(tip==="witch_kill"||tip==="witch_protect")return false; // Cadı iksirleri engellenemez
   return true;
+}
+// Engelleme (escort/kabus vampir) uygulanmış "gerçek" eylemler listesini hesaplar.
+// KRİTİK: Hem yöneticinin "Gece Özeti" ön izlemesinde (gündüzü başlatmadan önce) HEM DE gerçek gece çözümlemesinde
+// (resolveNight) AYNI fonksiyon kullanılır — böylece yöneticiye gösterilen özet ile sabah gerçekleşen asla farklı olamaz.
+function computeEffectiveActions(actions,players,roles){
+  const blocks=actions.filter(a=>a.tip==="kabus_block");
+  const nonSkipActions=actions.filter(a=>a.tip!=="skip");
+  const blockedOut=[];
+  const blockFiltered=nonSkipActions.filter(a=>{
+    if(a.tip==="kabus_block")return true; // blok kendisi her zaman geçer
+    const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
+    if(!actor)return true;
+    const aIdx=actions.indexOf(a);
+    // Engelleme, sadece SIRADA ÖNCE gerçekleştiyse geçerlidir (rol kullanım önceliği — gece sırasına göre).
+    const priorBlock=blocks.find(b=>b.targetId===actor.id&&actions.indexOf(b)<aIdx);
+    if(!priorBlock)return true;
+    const rolDef=roles.find(r=>r.id===a.roleId);
+    if(rolDef?.killType==="ultimate")return true; // Mutlak öldürme engellemeye takılmaz
+    if(a.tip==="witch_kill"||a.tip==="witch_protect")return true; // Cadı iksirleri engellenemez
+    blockedOut.push({action:a,actor});
+    return false; // engellendi
+  });
+  // Kabus Vampir / Gözcü Vampir: normal vampir öldüğünde ikisine de "Öldür" yeteneği açılır,
+  // ama aynı gece SADECE BİRİ öldürebilir. actions dizisi zaten gece sırasına göre dolduğu için
+  // (host, roller arasında nightOrder sırasıyla ilerler), ilk rastlanan geçerli sayılır — diğeri iptal edilir.
+  let dualVampirKillUsed=false;
+  const effectiveActions=blockFiltered.filter(a=>{
+    if(a.tip==="kill"&&DUAL_VAMPIR_KILL_ROLES.includes(a.roleId)){
+      if(dualVampirKillUsed){
+        const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
+        blockedOut.push({action:a,actor,vampirTeamAlreadyKilled:true});
+        return false;
+      }
+      dualVampirKillUsed=true;
+    }
+    return true;
+  });
+  return{effectiveActions,blockedOut};
 }
 function getEligible(roleId,ability,actor,allPlayers,nightNum,docHist){
   const dh=docHist||{};
@@ -142,9 +201,12 @@ function getEligible(roleId,ability,actor,allPlayers,nightNum,docHist){
   }
   if(ability.tip==="reveal"){const pool=alive.filter(p=>p.id!==actor?.id);return{targets:pool,reason:pool.length===0?"Bakabileceğin kimse yok.":null};}
   if(ability.tip==="revive"){
-    // Rahip: ölüleri hedef alabilir (iyi/kötü fark etmez), sadece 1 kez kullanım
+    // Rahip: ölüleri hedef alabilir, sadece 1 kez kullanım
     if((actor?.abilityUses?.a9??ability.kullanim)===0)return{targets:[],reason:"Diriltme hakkın bitti."};
-    return{targets:dead,reason:dead.length===0?"Diriltebileceğin ölü oyuncu yok.":null};
+    // Sabah oylamasında (idam ile) asılan kötü rollü biri diriltilemez; iyi rollü asılan diriltilebilir.
+    // İdam dışı (gece) ölümlerde rol farkı gözetilmez.
+    const pool=dead.filter(p=>!(p.lynched&&p.rol?.takim!=="iyi"));
+    return{targets:pool,reason:pool.length===0?"Diriltebileceğin ölü oyuncu yok.":null};
   }
   if(ability.tip==="announce")return{targets:[],reason:null,selfAction:true};
   if(ability.tip==="witch_kill"){const pool=alive.filter(p=>p.id!==actor?.id);return{targets:pool,reason:pool.length===0?"Hedef yok.":null};}
@@ -439,12 +501,12 @@ function RoleBookButton({roles}){
   return <>
     <button onClick={()=>setOpen(o=>!o)} style={{background:T.accentDim,border:`1px solid ${T.accentBorder}`,borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:16,color:T.accent}} title="Rol Kitabı">📚</button>
     {open&&<div onClick={()=>setOpen(false)} style={{position:"fixed",inset:0,zIndex:200,display:"flex",alignItems:"flex-start",justifyContent:"flex-end",paddingTop:70,paddingRight:16}}>
-      <div onClick={e=>e.stopPropagation()} style={{background:"linear-gradient(160deg,rgba(22,14,50,0.98),rgba(13,10,31,0.98))",border:`1px solid ${T.border}`,borderRadius:T.lg,padding:T.s16,minWidth:260,maxWidth:340,maxHeight:"80vh",overflowY:"auto",boxShadow:"0 8px 32px rgba(0,0,0,0.5)",animation:"fadeUp 200ms ease-out"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"linear-gradient(160deg,rgba(22,14,50,0.98),rgba(13,10,31,0.98))",border:`1px solid ${T.border}`,borderRadius:T.lg,padding:T.s16,minWidth:260,maxWidth:340,maxHeight:"80vh",overflowY:"auto",overflowAnchor:"none",boxShadow:"0 8px 32px rgba(0,0,0,0.5)",animation:"fadeUp 200ms ease-out"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:T.s12}}>
           <span style={{fontFamily:"'IM Fell English',serif",color:T.accent,fontSize:14,letterSpacing:2}}>📚 Rol Kitabı</span>
           <Btn variant="icon" onClick={()=>setOpen(false)} ariaLabel="Kapat" style={{padding:"4px"}}>✕</Btn>
         </div>
-        {[...roles].sort((a,b)=>{const ai=ROLE_BADGE_ORDER.indexOf(a.id);const bi=ROLE_BADGE_ORDER.indexOf(b.id);if(ai===-1&&bi===-1)return 0;if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;}).map(r=><div key={r.id} style={{background:"rgba(255,255,255,0.03)",borderRadius:T.md,border:`1px solid ${r.renk}33`,marginBottom:T.s6,overflow:"hidden"}}>
+        {[...roles].sort((a,b)=>{const ai=ROLE_BADGE_ORDER.indexOf(a.id);const bi=ROLE_BADGE_ORDER.indexOf(b.id);if(ai===-1&&bi===-1)return 0;if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;}).map(r=><div key={r.id} style={{background:"rgba(255,255,255,0.03)",borderRadius:T.md,border:`1px solid ${r.renk}33`,marginBottom:T.s6,overflow:"hidden",contain:"layout"}}>
           <div style={{display:"flex",alignItems:"center",gap:T.s8,padding:`${T.s10||"10px"} ${T.s12}`,cursor:"pointer"}} onClick={()=>setExpanded(expanded===r.id?null:r.id)}>
             <span style={{fontSize:18}}>{r.emoji}</span>
             <div style={{flex:1}}>
@@ -508,7 +570,7 @@ function DeathNotePopup({death,onClose,isHost}){
 
   // (yırtık kenarlar artık SVG overlay ile yapılıyor — ayrı path yok)
 
-  return <div style={{
+  return ReactDOM.createPortal(<div style={{
     position:"fixed",inset:0,zIndex:620,
     display:"flex",alignItems:"center",justifyContent:"center",
     background:"rgba(0,0,0,0.93)",
@@ -652,7 +714,7 @@ function DeathNotePopup({death,onClose,isHost}){
             marginBottom:14,
             animation:"dnReveal 0.5s ease-out 0.15s both",opacity:0
           }}>
-            {new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long"})} — gece vakti
+            {new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long"})}, gece vakti
           </div>
 
           {/* Başlık — "ÖLÜM BİLDİRGESİ" */}
@@ -760,7 +822,7 @@ function DeathNotePopup({death,onClose,isHost}){
               fontSize:10.5,
               color:"rgba(26,8,0,0.38)",
               marginTop:6,paddingRight:2
-            }}>— Karanlığın imzası</div>
+            }}>Karanlığın imzası</div>
           </div>:<div style={{
             textAlign:"center",
             padding:"2px 0 20px",
@@ -849,7 +911,7 @@ function DeathNotePopup({death,onClose,isHost}){
       </div>{/* /kağıt gövde */}
 
     </div>{/* /wrapper */}
-  </div>;
+  </div>,document.body);
 }
 
 // ── GAME LOG ──────────────────────────────────────────────────────────────────
@@ -920,48 +982,98 @@ function NightRecapCard({recap,players}){
   if(!recap||!Array.isArray(recap.actions))return null;
   const skips=recap.actions.filter(a=>a.tip==="skip");
   const real=recap.actions.filter(a=>a.tip!=="skip");
-  const tipLabel={kill:"🔪 Öldürme Girişimi",witch_kill:"🔪 Öldürme İksiri",witch_protect:"🛡️ Koruma İksiri",protect:"🛡️ Koruma",reveal:"🔮 Rol Bak",kabus_block:"🚫 Engelleme",sheriff_shoot:"🔫 Ateş",revive:"✨ Diriltme"};
+  const sectionMeta={
+    kill:{label:"Öldürme Girişimi",icon:"🔪",color:T.danger},
+    witch_kill:{label:"Öldürme İksiri",icon:"🔪",color:T.danger},
+    sheriff_shoot:{label:"Şerif Ateşi",icon:"🔫",color:T.danger},
+    protect:{label:"Koruma",icon:"🛡️",color:T.success},
+    witch_protect:{label:"Koruma İksiri",icon:"🛡️",color:T.success},
+    kabus_block:{label:"Engelleme",icon:"🚫",color:T.warning},
+    reveal:{label:"Rol Görme",icon:"🔮",color:T.accent},
+    revive:{label:"Diriltme",icon:"✨",color:T.success},
+  };
   const killTips=["kill","witch_kill","sheriff_shoot"];
   const protects=real.filter(a=>a.tip==="protect"||a.tip==="witch_protect");
+  const blocks=real.filter(a=>a.tip==="kabus_block");
   const totalCount=real.length+skips.length;
+
+  // Kişi + rol etiketi (kim olduğu HER ZAMAN net görünsün)
+  const PersonTag=({p})=>p?<span style={{display:"inline-flex",alignItems:"center",gap:4}}>
+    <span style={{color:T.textPrimary,fontWeight:700}}>{p.ad}</span>
+    <span style={{fontSize:10,color:p.rol?.renk||T.textMuted,background:(p.rol?.renk||T.textMuted)+"22",border:`1px solid ${(p.rol?.renk||T.textMuted)+"55"}`,borderRadius:8,padding:"1px 6px",fontWeight:700}}>{p.rol?.emoji} {p.rol?.ad||"?"}</span>
+  </span>:<span style={{color:T.textMuted}}>?</span>;
+
+  // Üstteki genel özet — tek bakışta gece ne oldu
+  const deathCount=real.filter(a=>killTips.includes(a.tip)).filter(a=>{
+    const target=players.find(p=>p.id===a.targetId);
+    if(!target)return false;
+    const savedBy=protects.find(pr=>pr.targetId===target.id);
+    return!savedBy&&target.durum==="ölü";
+  }).length;
+  const savedCount=protects.filter(pr=>real.some(a=>killTips.includes(a.tip)&&a.targetId===pr.targetId)).length;
+  const summaryBits=[];
+  if(deathCount>0)summaryBits.push(`💀 ${deathCount} ölüm`);
+  if(savedCount>0)summaryBits.push(`🛡️ ${savedCount} kurtarma`);
+  if(blocks.length>0)summaryBits.push(`🚫 ${blocks.length} engelleme`);
+  if(real.some(a=>a.tip==="reveal"))summaryBits.push(`🔮 ${real.filter(a=>a.tip==="reveal").length} rol görme`);
+  if(real.some(a=>a.tip==="revive"))summaryBits.push(`✨ diriltme`);
+  if(skips.length>0)summaryBits.push(`⏭ ${skips.length} atlama`);
+
+  const order=["kill","witch_kill","sheriff_shoot","protect","witch_protect","kabus_block","reveal","revive"];
+  const grouped=order.map(tip=>({tip,items:real.filter(a=>a.tip===tip)})).filter(g=>g.items.length>0);
+
   return <GlassCard style={{padding:T.s12,marginBottom:T.s16,border:`1px solid ${T.accentBorder}`}}>
-    <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",gap:T.s8,background:"transparent",border:"none",cursor:"pointer",padding:0}}>
-      <span style={{fontSize:16}}>🌙</span>
-      <span style={{fontFamily:"'IM Fell English',serif",color:T.accent,fontSize:14,letterSpacing:1.5}}>Geçen Gece Özeti — {recap.round}. Gece</span>
-      <Tag color={T.textMuted} size="sm">Sadece sende görünür</Tag>
-      {totalCount>0&&<Tag color={T.accent} size="sm">{totalCount}</Tag>}
-      <span style={{marginLeft:"auto",fontSize:12,color:T.textMuted}}>{open?"▲ Gizle":"▼ Detay Göster"}</span>
+    <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",flexDirection:"column",gap:T.s4,background:"transparent",border:"none",cursor:"pointer",padding:0,textAlign:"left"}}>
+      <div style={{display:"flex",alignItems:"center",gap:T.s8}}>
+        <span style={{fontSize:16}}>🌙</span>
+        <span style={{fontFamily:"'IM Fell English',serif",color:T.accent,fontSize:14,letterSpacing:1.5}}>Geçen Gece Özeti: {recap.round}. Gece</span>
+        <Tag color={T.textMuted} size="sm">Sadece sende görünür</Tag>
+        <span style={{marginLeft:"auto",fontSize:12,color:T.textMuted}}>{open?"▲ Gizle":"▼ Detay Göster"}</span>
+      </div>
+      {summaryBits.length>0
+        ?<div style={{fontSize:12,color:T.textSecondary,fontWeight:600,paddingLeft:24}}>{summaryBits.join("  ·  ")}</div>
+        :<div style={{fontSize:12,color:T.textMuted,paddingLeft:24}}>Bu gece sakin geçti. Kayda değer bir şey olmadı.</div>}
     </button>
     {open&&<div style={{marginTop:T.s12,paddingTop:T.s12,borderTop:`1px solid ${T.border}`}}>
       {totalCount===0?<p style={{fontSize:12,color:T.textMuted}}>Bu gece kimse yeteneğini kullanmadı.</p>:
-      <div style={{display:"flex",flexDirection:"column",gap:T.s8}}>
-        {real.map((a,i)=>{
-          const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
-          const target=players.find(p=>p.id===a.targetId);
-          let extra=null;
-          if(killTips.includes(a.tip)&&target){
-            const savedBy=protects.find(pr=>pr.targetId===target.id);
-            const saver=savedBy?(savedBy.actorId?players.find(p=>p.id===savedBy.actorId):players.find(p=>p.rol?.id===savedBy.roleId)):null;
-            extra=saver?<span style={{color:T.success}}> — {saver.ad} korudu, {target.ad} sağ kaldı</span>:<span style={{color:T.danger}}> — {target.ad} öldürüldü</span>;
-          }
-          if(a.tip==="reveal"&&target){
-            extra=<span style={{color:T.accent}}> — rolü öğrenildi: {target.rol?.emoji} {target.rol?.ad||"?"}</span>;
-          }
-          return <div key={i} style={{fontSize:12,color:T.textSecondary,display:"flex",gap:T.s6,alignItems:"center",flexWrap:"wrap"}}>
-            <span style={{fontSize:9,color:T.accent,background:T.accentDim,borderRadius:3,padding:"1px 5px",fontWeight:700,letterSpacing:0.5}}>{tipLabel[a.tip]||a.tip}</span>
-            <span style={{color:T.textPrimary,fontWeight:600}}>{actor?.ad||"?"}</span>
-            {target&&<><span>→</span><span style={{color:T.textPrimary,fontWeight:600}}>{target.ad}</span></>}
-            {extra}
+      <div style={{display:"flex",flexDirection:"column",gap:T.s14||14}}>
+        {grouped.map(({tip,items})=>{
+          const meta=sectionMeta[tip]||{label:tip,icon:"•",color:T.textMuted};
+          return <div key={tip}>
+            <p style={{fontSize:10,color:meta.color,letterSpacing:1,fontWeight:700,marginBottom:T.s6,textTransform:"uppercase"}}>{meta.icon} {meta.label}</p>
+            <div style={{display:"flex",flexDirection:"column",gap:T.s8}}>
+              {items.map((a,i)=>{
+                const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
+                const target=players.find(p=>p.id===a.targetId);
+                let extra=null;
+                if(killTips.includes(tip)&&target){
+                  const savedBy=protects.find(pr=>pr.targetId===target.id);
+                  const saver=savedBy?(savedBy.actorId?players.find(p=>p.id===savedBy.actorId):players.find(p=>p.rol?.id===savedBy.roleId)):null;
+                  extra=saver?<div style={{fontSize:11,color:T.success,marginTop:2}}>🛡️ {saver.ad} korudu, {target.ad} sağ kaldı</div>:<div style={{fontSize:11,color:T.danger,marginTop:2}}>💀 {target.ad} öldürüldü</div>;
+                }
+                return <div key={i} style={{fontSize:13,background:"rgba(255,255,255,0.03)",border:`1px solid ${T.border}`,borderRadius:T.md,padding:`${T.s8} ${T.s12}`}}>
+                  <div style={{display:"flex",alignItems:"center",gap:T.s8,flexWrap:"wrap"}}>
+                    <PersonTag p={actor}/>
+                    {target&&<><span style={{color:T.textMuted}}>→</span><PersonTag p={target}/></>}
+                    {a.deathNote&&<span style={{fontSize:11,color:T.textMuted,fontStyle:"italic"}}>📝 not bıraktı</span>}
+                  </div>
+                  {extra}
+                </div>;
+              })}
+            </div>
           </div>;
         })}
-        {skips.map((a,i)=>{
-          const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
-          return <div key={"skip"+i} style={{fontSize:12,color:T.textMuted,display:"flex",gap:T.s6,alignItems:"center",flexWrap:"wrap"}}>
-            <span style={{fontSize:9,color:T.textMuted,background:"rgba(255,255,255,0.06)",borderRadius:3,padding:"1px 5px",fontWeight:700,letterSpacing:0.5}}>⏭ ATLADI</span>
-            <span style={{color:T.textPrimary,fontWeight:600}}>{actor?.ad||"?"}</span>
-            <span>geceyi atladı, yeteneğini kullanmadı</span>
-          </div>;
-        })}
+        {skips.length>0&&<div>
+          <p style={{fontSize:10,color:T.textMuted,letterSpacing:1,fontWeight:700,marginBottom:T.s6,textTransform:"uppercase"}}>⏭ Atlayanlar</p>
+          <div style={{display:"flex",flexDirection:"column",gap:T.s8}}>
+            {skips.map((a,i)=>{
+              const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
+              return <div key={"skip"+i} style={{fontSize:13,background:"rgba(255,255,255,0.03)",border:`1px solid ${T.border}`,borderRadius:T.md,padding:`${T.s8} ${T.s12}`,display:"flex",alignItems:"center",gap:T.s8}}>
+                <PersonTag p={actor}/><span style={{color:T.textMuted,fontSize:12}}>geceyi atladı, yeteneğini kullanmadı</span>
+              </div>;
+            })}
+          </div>
+        </div>}
       </div>}
     </div>}
   </GlassCard>;
@@ -971,7 +1083,7 @@ function NightRecapCard({recap,players}){
 function VotingPanel({players,round,onLynch,isHost,lobbyCode,myName,fb,onSkipToNight}){
   const alive=players.filter(p=>p.durum==="canlı"&&!p.isHost);
   const majority=Math.floor(alive.length/2)+1;
-  const[vphase,setVphase]=useState(round===1?"no_vote":"poll");
+  const[vphase,setVphase]=useState("poll");
   const[rtgts,setRtgts]=useState(null);
   const[fbVotes,setFbVotes]=useState({});
   const[pollVotes,setPollVotes]=useState({});
@@ -983,12 +1095,12 @@ function VotingPanel({players,round,onLynch,isHost,lobbyCode,myName,fb,onSkipToN
       const d=snap.val();
       if(d){
         setFbVotes(d.votes||{});
-        setVphase(d.phase||(round===1?"no_vote":"poll"));
+        setVphase(d.phase||("poll"));
         setRtgts(d.rtgts||null);
         setPollVotes(d.pollVotes||{});
       } else {
         setFbVotes({});
-        setVphase(round===1?"no_vote":"poll");
+        setVphase("poll");
         setRtgts(null);
         setPollVotes({});
       }
@@ -1046,18 +1158,10 @@ function VotingPanel({players,round,onLynch,isHost,lobbyCode,myName,fb,onSkipToN
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:T.s16,flexWrap:"wrap",gap:T.s8}}>
       <div style={{display:"flex",alignItems:"center",gap:T.s8}}>
         <span>⚖️</span>
-        <span style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:16,letterSpacing:2}}>Gündüz — {round}. Gün</span>
+        <span style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:16,letterSpacing:2}}>Gündüz: {round}. Gün</span>
       </div>
       {isHost&&vphase!=="no_vote"&&<Btn variant="icon" onClick={reset} ariaLabel="Sıfırla">↺</Btn>}
     </div>
-
-    {vphase==="no_vote"&&<div style={{textAlign:"center",padding:`${T.s24} 0`}}>
-      <div style={{fontSize:48,marginBottom:T.s12}}>☀️</div>
-      <p style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:16,marginBottom:T.s8}}>Oyun başladı!</p>
-      <p style={{fontSize:13,color:T.textMuted,marginBottom:T.s24}}>İlk gündüz kimse idam edilmez.</p>
-      {isHost&&<Btn variant="accent" onClick={()=>{if(onSkipToNight)onSkipToNight();}} style={{justifyContent:"center",gap:T.s8,padding:"12px 24px"}}>🌙 Geceye Geç</Btn>}
-      {!isHost&&<p style={{color:T.textMuted,fontSize:13}}>Yönetici geceyi başlatacak...</p>}
-    </div>}
 
     {vphase==="poll"&&<>
       {isHost&&<div style={{textAlign:"center",padding:`${T.s24} 0`}}>
@@ -1076,7 +1180,7 @@ function VotingPanel({players,round,onLynch,isHost,lobbyCode,myName,fb,onSkipToN
     {vphase==="poll_open"&&<>
       <div style={{background:"rgba(167,139,250,0.08)",border:`1px solid ${T.accentBorder}`,borderRadius:T.md,padding:T.s16,marginBottom:T.s16,textAlign:"center"}}>
         <p style={{fontFamily:"'IM Fell English',serif",color:T.accent,fontSize:15,marginBottom:T.s8}}>Bugün oylama yapılsın mı?</p>
-        <p style={{fontSize:12,color:T.textMuted}}>Evet ({pollYes}) / Hayır ({pollNo}) — Çoğunluk: {pollMaj}</p>
+        <p style={{fontSize:12,color:T.textMuted}}>Evet ({pollYes}) / Hayır ({pollNo}), Çoğunluk: {pollMaj}</p>
         {pollDone&&<p style={{fontSize:12,color:T.success,marginTop:T.s8,fontWeight:700}}>{pollYes>=pollMaj?"✓ Oylama yapılacak!":"✕ Oylama yapılmayacak."}</p>}
       </div>
       {canVote&&!myPollVote&&<div style={{display:"flex",gap:T.s8,marginBottom:T.s16}}>
@@ -1096,7 +1200,12 @@ function VotingPanel({players,round,onLynch,isHost,lobbyCode,myName,fb,onSkipToN
     {(vphase==="lynched"||vphase==="no_lynch")&&<div className="enter" style={{textAlign:"center",padding:`${T.s32} 0`}}>
       <div style={{fontSize:48,marginBottom:T.s12}}>{vphase==="lynched"?"⚖️":"🕊️"}</div>
       <p style={{fontFamily:"'IM Fell English',serif",fontSize:18,color:vphase==="lynched"?T.danger:T.accent}}>{vphase==="lynched"?`${getName(leaders[0]?.[0])} idam edildi!`:"Bugün kimse idam edilmedi."}</p>
-      {vphase==="lynched"&&(()=>{const lp=players.find(p=>p.id===parseInt(leaders[0]?.[0]));return lp?.rol?<div style={{marginTop:T.s8,display:"flex",justifyContent:"center"}}><Tag color={lp.rol.renk||T.danger}>{lp.rol.emoji} {lp.rol.ad}</Tag></div>:null;})()}
+      {vphase==="lynched"&&(()=>{const lp=players.find(p=>p.id===parseInt(leaders[0]?.[0]));return lp?.rol?<div style={{marginTop:T.s12,display:"flex",justifyContent:"center"}}>
+        <div style={{background:(lp.rol.renk||T.danger)+"1e",border:`1.5px solid ${lp.rol.renk||T.danger}`,borderRadius:T.lg,padding:`${T.s12} ${T.s20||20}`,display:"flex",flexDirection:"column",alignItems:"center",gap:T.s4}}>
+          <span style={{fontSize:32}}>{lp.rol.emoji}</span>
+          <span style={{fontFamily:"'IM Fell English',serif",fontSize:17,fontWeight:700,letterSpacing:1,color:lp.rol.renk||T.danger}}>{lp.rol.ad}</span>
+        </div>
+      </div>:null;})()}
       {isHost&&<div style={{display:"flex",gap:T.s8,justifyContent:"center",marginTop:T.s24}}>
         <Btn variant="secondary" onClick={reset} style={{justifyContent:"center"}}>↺ Yeni Oylama</Btn>
         <Btn variant="accent" onClick={()=>{if(onSkipToNight)onSkipToNight();}} style={{justifyContent:"center",gap:T.s4}}>🌙 Geceye Geç</Btn>
@@ -1363,7 +1472,7 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
       return <GlassCard style={{padding:T.s24}}>
         <div style={{display:"flex",alignItems:"center",gap:T.s12,marginBottom:T.s16}}>
           <span style={{fontSize:28}}>🧙‍♀️</span>
-          <div style={{fontFamily:"'IM Fell English',serif",color:myRole.renk,fontSize:16}}>Cadı — İksir Seç</div>
+          <div style={{fontFamily:"'IM Fell English',serif",color:myRole.renk,fontSize:16}}>Cadı: İksir Seç</div>
         </div>
         <div style={{display:"flex",gap:T.s8,marginBottom:T.s16,flexWrap:"wrap"}}>
           {myRole.abilities.map(a=>{
@@ -1406,6 +1515,8 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
     // Dual ability roles (gozcu_vampir, kabus_vampir)
     if(myRole.isDualAbility){
       const vampirAlive=players.some(p=>p.rol?.id==="vampir"&&p.durum==="canlı");
+      const killUnlocked=isDualVampirKillUnlocked(myRoleId,players);
+      const killLocked=!killUnlocked;
       const primaryAb=myRole.abilities[0];
       const killAb=myRole.abilities[1];
       const{targets:dEligible}=getEligible(myRoleId,dualAbility?myRole.abilities.find(a=>a.id===dualAbility):primaryAb,myPlayer,players,nightNum,{});
@@ -1418,18 +1529,18 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
           <button onClick={()=>setDualAbility(primaryAb.id)} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:"pointer",background:dualAbility===primaryAb.id||!dualAbility?myRole.renk+"33":T.surface,border:`1px solid ${dualAbility===primaryAb.id||!dualAbility?myRole.renk:T.border}`,color:dualAbility===primaryAb.id||!dualAbility?myRole.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
             {primaryAb.tip==="reveal"?"🔮 Rol Gör":"🚫 Engelle"}
           </button>
-          <button onClick={()=>!vampirAlive&&setDualAbility(killAb.id)} disabled={vampirAlive} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:vampirAlive?"not-allowed":"pointer",opacity:vampirAlive?0.4:1,background:dualAbility===killAb.id?myRole.renk+"33":T.surface,border:`1px solid ${dualAbility===killAb.id?myRole.renk:T.border}`,color:dualAbility===killAb.id?myRole.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
-            💀 Öldür {vampirAlive?"🔒":""}
+          <button onClick={()=>!killLocked&&setDualAbility(killAb.id)} disabled={killLocked} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:killLocked?"not-allowed":"pointer",opacity:killLocked?0.4:1,background:dualAbility===killAb.id?myRole.renk+"33":T.surface,border:`1px solid ${dualAbility===killAb.id?myRole.renk:T.border}`,color:dualAbility===killAb.id?myRole.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
+            💀 Öldür {killLocked?"🔒":""}
           </button>
         </div>
-        {vampirAlive&&<p style={{fontSize:11,color:T.textMuted,marginBottom:T.s12,textAlign:"center"}}>⚠️ Oyunda vampir varken öldür seçeneği kilitli.</p>}
+        {killLocked&&<p style={{fontSize:11,color:T.textMuted,marginBottom:T.s12,textAlign:"center"}}>{!vampirAlive?"⚠️ Oyunda vampir varken öldür seçeneği kilitli.":"⚠️ Öldür seçeneği şu an sırada değilsin, kilitli."}</p>}
         <div style={{display:"flex",flexDirection:"column",gap:T.s8,marginBottom:T.s12}}>
           {dEligible.map(p=><div key={p.id} onClick={()=>setPlayerChoice(p.id===playerChoice?null:p.id)}
             style={{padding:`${T.s12} ${T.s16}`,borderRadius:T.md,cursor:"pointer",background:playerChoice===p.id?myRole.renk+"22":T.surface,border:`1px solid ${playerChoice===p.id?myRole.renk+"77":T.border}`,fontWeight:playerChoice===p.id?700:400,fontSize:14,color:playerChoice===p.id?T.textPrimary:T.textSecondary}}>
             {p.ad}
           </div>)}
         </div>
-        <Btn variant="accent" onClick={()=>{if(playerChoice!=null){const selAb=myRole.abilities.find(a=>a.id===(dualAbility||primaryAb.id));submitPlayerChoice(playerChoice,selAb?.tip);}}} disabled={playerChoice===null} style={{width:"100%",justifyContent:"center",padding:"12px 0"}}>✓ Seçimi Onayla ve Kilitle</Btn>
+        <Btn variant="accent" onClick={()=>{if(playerChoice!=null){const wantsKill=dualAbility===killAb.id;const selAb=myRole.abilities.find(a=>a.id===((wantsKill&&!killLocked)?killAb.id:primaryAb.id));submitPlayerChoice(playerChoice,selAb?.tip);}}} disabled={playerChoice===null} style={{width:"100%",justifyContent:"center",padding:"12px 0"}}>✓ Seçimi Onayla ve Kilitle</Btn>
         <Btn variant="ghost" onClick={()=>{if(!fb||!lobbyCode||!myPlayer||playerSubmitted)return;const pRef=fb.ref(fb.db,`lobbies/${lobbyCode}/nightActions/${nightNum}/${myPlayer.id}`);fb.set(pRef,{targetId:null,roleId:myRoleId,tip:"skip",skipped:true});setPlayerChoice(null);setPlayerSubmitted(true);}} style={{width:"100%",justifyContent:"center",padding:"10px 0",marginTop:T.s4}}>⏭ Bu Geceyi Atla</Btn>
       </GlassCard>;
     }
@@ -1438,7 +1549,7 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
       <div style={{display:"flex",alignItems:"center",gap:T.s12,marginBottom:T.s8}}>
         <span style={{fontSize:28}}>{myRole.emoji}</span>
         <div>
-          <div style={{fontFamily:"'IM Fell English',serif",color:myRole.renk,fontSize:16}}>{myRole.ad} — {myAbility.ad}</div>
+          <div style={{fontFamily:"'IM Fell English',serif",color:myRole.renk,fontSize:16}}>{myRole.ad}: {myAbility.ad}</div>
           <div style={{fontSize:11,color:T.textMuted,marginTop:T.s4}}>⚠️ Sadece isimler görünür. Seçim sonrası kilitlenir.</div>
         </div>
       </div>
@@ -1496,22 +1607,31 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
   const setDocHist=(v)=>{if(onHostDocHist)onHostDocHist(typeof v==="function"?v(docHist):v);}; 
 
   // TÜM ROLLER BİTTİ → Özet ekranı
+  // KRİTİK: Burada gösterilen önizleme, resolveNight'ın gerçekte uygulayacağı ile BİREBİR aynı olmalı
+  // (aksi halde yöneticiye gösterilen özet ile sabah yaşananlar uyuşmaz). Bu yüzden aynı
+  // computeEffectiveActions() fonksiyonu kullanılır — engelleme (escort/kabus vampir) burada da uygulanır.
   if(step>=steps.length){
-    const kills=actions.filter(a=>a.tip==="kill"||a.tip==="witch_kill"||a.tip==="sheriff_shoot");
-    const protects=actions.filter(a=>a.tip==="protect"||a.tip==="witch_protect");
-    const reveals=actions.filter(a=>a.tip==="reveal");
-    const revives=actions.filter(a=>a.tip==="revive");
+    const{effectiveActions:previewEffective}=computeEffectiveActions(actions,players,roles);
+    const kills=previewEffective.filter(a=>(a.tip==="kill"||a.tip==="witch_kill"||a.tip==="sheriff_shoot")&&a.roleId!=="hirsiz");
+    const protects=previewEffective.filter(a=>a.tip==="protect"||a.tip==="witch_protect");
+    const reveals=previewEffective.filter(a=>a.tip==="reveal");
+    const revives=previewEffective.filter(a=>a.tip==="revive");
     const preview=players.filter(p=>!p.isHost).map(p=>{
       const k=kills.find(x=>x.targetId===p.id);
       if(!k)return null;
       const isWitchKill=k.tip==="witch_kill";
+      const killer=k.actorId?players.find(x=>x.id===k.actorId):players.find(x=>x.rol?.id===k.roleId);
+      // Vampir Seri Katil'i öldüremez
+      if(k.tip==="kill"&&killer?.rol?.takim==="karanlık"&&p.rol?.isSerialKiller){
+        return{p,k,blocked:true,killerName:killer?.ad||k.roleId,protName:"",deathNote:k.deathNote,immune:"Seri Katil vampirler tarafından öldürülemez"};
+      }
       // Cadı öldürmesini doktor kurtaramaz, ama cadı koruma iksiri her şeyi kurtarır
       const witchProt=protects.find(x=>x.targetId===p.id&&x.tip==="witch_protect");
       const prot=witchProt||(isWitchKill?null:protects.find(x=>x.targetId===p.id));
       let blocked=false;
       if(witchProt){blocked=!isWitchKill;} // cadı korur; cadı öldürmesini cadı koruması da durduramaz
       else if(prot){const pr=roles.find(r=>r.id===prot.roleId),kr=roles.find(r=>r.id===k.roleId);if((pr?.defType==="ultimate"?2:pr?.defType==="standard"?1:0)>=(kr?.killType==="ultimate"?2:1))blocked=true;}
-      const killerName=(k.actorId?players.find(x=>x.id===k.actorId):players.find(x=>x.rol?.id===k.roleId))?.ad||k.roleId;
+      const killerName=killer?.ad||k.roleId;
       const protName=prot?players.find(x=>x.rol?.id===prot.roleId)?.ad||prot.roleId:"";
       return{p,k,blocked,killerName,protName,deathNote:k.deathNote};
     }).filter(Boolean);
@@ -1519,10 +1639,11 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
     actionsRef.current=actions;
     const handleStartDay=async()=>{
       if(resolving)return;
+      let freshPlayers=null;
       if(!nightResolved){
-        await onResolve(actionsRef.current);
+        freshPlayers=await onResolve(actionsRef.current);
       }
-      if(onDayStart)onDayStart();
+      if(onDayStart)onDayStart(freshPlayers);
     };
 
     return <GlassCard style={{padding:T.s24}}>
@@ -1557,7 +1678,7 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
       </div>}
 
       {/* Cadı iksiri kullanımı özeti */}
-      {(()=>{const witchActions=actions.filter(a=>a.roleId==="kadin"&&["witch_kill","witch_protect","reveal"].includes(a.tip));if(witchActions.length===0)return null;return<div style={{marginBottom:T.s16}}><p style={{fontSize:11,color:T.textMuted,letterSpacing:1,marginBottom:T.s8}}>🧙‍♀️ CADI İKSİRİ</p><div style={{display:"flex",flexDirection:"column",gap:T.s8}}>{witchActions.map((a,i)=>{const tgt=players.find(p=>p.id===a.targetId);const label=a.tip==="witch_kill"?"💀 Öldür İksiri":a.tip==="witch_protect"?"🛡️ Koru İksiri":"🔮 Rol Bak İksiri";return<div key={i} style={{background:"rgba(211,84,0,0.1)",borderRadius:T.md,padding:`${T.s8} ${T.s16}`,border:"1px solid rgba(211,84,0,0.3)",display:"flex",alignItems:"center",gap:T.s8}}><span style={{fontSize:14}}>{a.tip==="witch_kill"?"💀":a.tip==="witch_protect"?"🛡️":"🔮"}</span><span style={{fontSize:13,color:"#d35400"}}><strong>{label}</strong>{tgt?<> → <strong style={{color:T.textPrimary}}>{tgt.ad}</strong></>:null}</span></div>;})}</div></div>;})()} 
+      {(()=>{const witchActions=previewEffective.filter(a=>a.roleId==="kadin"&&["witch_kill","witch_protect","reveal"].includes(a.tip));if(witchActions.length===0)return null;return<div style={{marginBottom:T.s16}}><p style={{fontSize:11,color:T.textMuted,letterSpacing:1,marginBottom:T.s8}}>🧙‍♀️ CADI İKSİRİ</p><div style={{display:"flex",flexDirection:"column",gap:T.s8}}>{witchActions.map((a,i)=>{const tgt=players.find(p=>p.id===a.targetId);const label=a.tip==="witch_kill"?"💀 Öldür İksiri":a.tip==="witch_protect"?"🛡️ Koru İksiri":"🔮 Rol Bak İksiri";return<div key={i} style={{background:"rgba(211,84,0,0.1)",borderRadius:T.md,padding:`${T.s8} ${T.s16}`,border:"1px solid rgba(211,84,0,0.3)",display:"flex",alignItems:"center",gap:T.s8}}><span style={{fontSize:14}}>{a.tip==="witch_kill"?"💀":a.tip==="witch_protect"?"🛡️":"🔮"}</span><span style={{fontSize:13,color:"#d35400"}}><strong>{label}</strong>{tgt?<> → <strong style={{color:T.textPrimary}}>{tgt.ad}</strong></>:null}</span></div>;})}</div></div>;})()} 
       {/* Engelleme özeti */}
       {(()=>{const blockActs=actions.filter(a=>a.tip==="kabus_block");if(blockActs.length===0)return null;return<div style={{marginBottom:T.s16}}><p style={{fontSize:11,color:T.textMuted,letterSpacing:1,marginBottom:T.s8}}>🚫 ENGELLEME</p><div style={{display:"flex",flexDirection:"column",gap:T.s8}}>{blockActs.map((a,i)=>{const blocker=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);const tgt=players.find(p=>p.id===a.targetId);return<div key={i} style={{background:"rgba(231,76,60,0.08)",borderRadius:T.md,padding:`${T.s8} ${T.s16}`,border:"1px solid rgba(231,76,60,0.25)",display:"flex",alignItems:"center",gap:T.s8}}><span style={{fontSize:14}}>🚫</span><span style={{fontSize:13,color:T.danger}}><strong style={{color:T.textPrimary}}>{blocker?.ad||"?"}</strong> → <strong style={{color:T.textPrimary}}>{tgt?.ad||"?"}</strong> engelledi (rol kullanamadı)</span></div>;})}</div></div>;})()}
       {reveals.length>0&&<div style={{marginBottom:T.s16}}>
@@ -1620,8 +1741,12 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
     }
     if(hostTarget===null)return;
     let usedTip=ab?.tip||"special";
-    // Dual ability: use hostDualChoice if set
-    if(cr?.isDualAbility&&hostDualChoice){usedTip=hostDualChoice;}
+    // Dual ability: use hostDualChoice if set — ama "kill" seçiliyse öncelik sırasına göre gerçekten açık mı diye tekrar doğrula (güvenlik ağı)
+    if(cr?.isDualAbility&&hostDualChoice){
+      const killAbTip=cr.abilities[1]?.tip;
+      if(hostDualChoice===killAbTip&&!isDualVampirKillUnlocked(cr.id,players)){usedTip=cr.abilities[0]?.tip;}
+      else{usedTip=hostDualChoice;}
+    }
     // Cadı: seçilen iksir tipini kullan
     if(cr?.isWitch&&hostWitchAbility){usedTip=hostWitchAbility;}
     if(usedTip==="protect"||usedTip==="witch_protect"){
@@ -1708,7 +1833,7 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
       <span style={{fontSize:32}}>{cr?.emoji}</span>
       <div style={{flex:1}}>
         <div style={{fontFamily:"'IM Fell English',serif",color:cr?.renk||T.accent,fontSize:17,fontWeight:700}}>{cr?.ad}</div>
-        <div style={{fontSize:12,color:T.textMuted}}>{step+1}/{steps.length} — {ab?.ad||"Eylem"}</div>
+        <div style={{fontSize:12,color:T.textMuted}}>{step+1}/{steps.length}: {ab?.ad||"Eylem"}</div>
       </div>
       <div style={{textAlign:"right"}}>
         <div style={{fontWeight:700,color:T.textPrimary,fontSize:14}}>{actor?.ad||"?"}</div>
@@ -1754,15 +1879,27 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
           })()}
           {cr?.isDualAbility&&(()=>{
             const vampirAlive=players.some(p=>p.rol?.id==="vampir"&&p.durum==="canlı");
+            // Bu gece daha önce (sırası önce gelen) bir ikincil vampir rolü zaten öldürdü mü?
+            // (actions dizisi nightOrder sırasına göre dolduğu için, bu adıma gelene kadar
+            // eklenmiş olan her şey gerçekten "önceki sıradaki" eylemlerdir.)
+            const dualVampirAlreadyKilled=actions.some(a=>a.tip==="kill"&&DUAL_VAMPIR_KILL_ROLES.includes(a.roleId));
+            // Öncelik sırasına göre: Normal Vampir ölmeden hiçbiri açılmaz. Vampir ölünce sıra
+            // Kabus Vampir'e geçer; Kabus Vampir de ölmüşse (veya oyunda yoksa) Gözcü Vampir'e geçer.
+            const killUnlockedForThisRole=isDualVampirKillUnlocked(cr.id,players);
+            const killLocked=!killUnlockedForThisRole||dualVampirAlreadyKilled;
             const primaryAb=cr.abilities[0];
             const killAb=cr.abilities[1];
-            return <div style={{display:"flex",gap:T.s8,marginBottom:T.s8}}>
-              <button onClick={()=>setHostDualChoice(primaryAb.tip)} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:"pointer",background:(!hostDualChoice||hostDualChoice===primaryAb.tip)?cr.renk+"33":T.surface,border:`1px solid ${(!hostDualChoice||hostDualChoice===primaryAb.tip)?cr.renk:T.border}`,color:(!hostDualChoice||hostDualChoice===primaryAb.tip)?cr.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
-                {primaryAb.tip==="reveal"?"🔮 Rol Gör":"🚫 Engelle"}
-              </button>
-              <button onClick={()=>!vampirAlive&&setHostDualChoice(killAb.tip)} disabled={vampirAlive} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:vampirAlive?"not-allowed":"pointer",opacity:vampirAlive?0.4:1,background:hostDualChoice===killAb.tip?cr.renk+"33":T.surface,border:`1px solid ${hostDualChoice===killAb.tip?cr.renk:T.border}`,color:hostDualChoice===killAb.tip?cr.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
-                💀 Öldür {vampirAlive?"🔒":""}
-              </button>
+            return <div style={{display:"flex",flexDirection:"column",gap:T.s6,marginBottom:T.s8}}>
+              <div style={{display:"flex",gap:T.s8}}>
+                <button onClick={()=>setHostDualChoice(primaryAb.tip)} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:"pointer",background:(!hostDualChoice||hostDualChoice===primaryAb.tip)?cr.renk+"33":T.surface,border:`1px solid ${(!hostDualChoice||hostDualChoice===primaryAb.tip)?cr.renk:T.border}`,color:(!hostDualChoice||hostDualChoice===primaryAb.tip)?cr.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
+                  {primaryAb.tip==="reveal"?"🔮 Rol Gör":"🚫 Engelle"}
+                </button>
+                <button onClick={()=>!killLocked&&setHostDualChoice(killAb.tip)} disabled={killLocked} style={{flex:1,padding:`${T.s8} ${T.s12}`,borderRadius:T.md,cursor:killLocked?"not-allowed":"pointer",opacity:killLocked?0.4:1,background:hostDualChoice===killAb.tip?cr.renk+"33":T.surface,border:`1px solid ${hostDualChoice===killAb.tip?cr.renk:T.border}`,color:hostDualChoice===killAb.tip?cr.renk:T.textSecondary,fontWeight:700,fontSize:12}}>
+                  💀 Öldür {killLocked?"🔒":""}
+                </button>
+              </div>
+              {dualVampirAlreadyKilled&&!vampirAlive&&<p style={{fontSize:11,color:T.textMuted,textAlign:"center"}}>⚠️ Vampir takımı bu gece zaten öldürdü. Öldür seçeneği kilitli.</p>}
+              {!dualVampirAlreadyKilled&&vampirAlive===false&&!killUnlockedForThisRole&&<p style={{fontSize:11,color:T.textMuted,textAlign:"center"}}>⚠️ Öldürme önceliği şu an başka ikincil vampir rolünde. Kilitli.</p>}
             </div>;
           })()}
           {eligible.map(p=><div key={p.id} onClick={()=>setHostTarget(p.id===hostTarget?null:p.id)}
@@ -2092,7 +2229,7 @@ function JoinScreen({onJoined}){
       {[
         {team:"karanlık",label:"Karanlık Takım",color:"#e74c3c",icon:"🧛",desc:"Gece öldür, gündüz yalan söyle."},
         {team:"iyi",label:"İyi Takım",color:"#27ae60",icon:"🌾",desc:"Vampirleri tespit et ve bertaraf et."},
-        {team:"nötr",label:"Nötr — Bağımsız",color:"#f39c12",icon:"⚖️",desc:"Kendi amacını gerçekleştir."},
+        {team:"nötr",label:"Nötr: Bağımsız",color:"#f39c12",icon:"⚖️",desc:"Kendi amacını gerçekleştir."},
       ].map(({team,label,color,icon,desc})=>{
         const teamRoles=DEFAULT_ROLES.filter(r=>r.takim===team);
         return <div key={team} style={{marginBottom:T.s32}}>
@@ -2543,14 +2680,15 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
   const[lastWordsToast,setLastWordsToast]=useState(null);
   const[activeDeathNote,setActiveDeathNote]=useState(null);
   const[showContactPicker,setShowContactPicker]=useState(false);
+  const[roleDescOpen,setRoleDescOpen]=useState(false);
   const[contactTarget,setContactTarget]=useState(null);
   const[contactText,setContactText]=useState("");
   const[hostMsgToast,setHostMsgToast]=useState(null);
+  const[voteStartToast,setVoteStartToast]=useState(null);
   const seenSkipKeys=useRef(new Set());
   const seenHostMsgKeys=useRef(new Set());
+  const lastVotePhaseRef=useRef(null);
   const seenLastWordsKeys=useRef(new Set());
-  const noteNamesRef=useRef([]);
-  const noteIdxRef=useRef(0);
 
   // Presence listener — kimin bağlı olduğunu takip et
   useEffect(()=>{
@@ -2642,7 +2780,7 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     const laRef=fb.ref(fb.db,`lobbies/${lobbyCode}/lynchAnnounce`);
     const unsub=fb.onValue(laRef,(snap)=>{
       const d=snap.val();
-      if(d&&d.ts&&Date.now()-d.ts<10000){setLynchAnnounce(d);setTimeout(()=>setLynchAnnounce(null),5000);}
+      if(d&&d.ts&&Date.now()-d.ts<10000){setLynchAnnounce(d);setTimeout(()=>setLynchAnnounce(null),6500);}
     });
     return()=>unsub();
   },[fb,lobbyCode,isHost]);
@@ -2690,6 +2828,28 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     return()=>unsub();
   },[fb,lobbyCode,isHost]);
 
+  // Oylama başladı toastı — hem "yapılsın mı?" ön-oylaması hem asıl idam oylaması başladığında HERKESİN ekranında küçük bir uyarı gösterir
+  useEffect(()=>{
+    if(!fb||!lobbyCode)return;
+    const vRef=fb.ref(fb.db,`lobbies/${lobbyCode}/votes`);
+    const unsub=fb.onValue(vRef,(snap)=>{
+      const d=snap.val();
+      const newPhase=d?d.phase||"poll":"poll";
+      const prevPhase=lastVotePhaseRef.current;
+      if(prevPhase!=null&&prevPhase!==newPhase){
+        if(newPhase==="poll_open"){
+          setVoteStartToast("🗳️ Oylama yapılsın mı oylaması başladı!");
+          setTimeout(()=>setVoteStartToast(null),3000);
+        } else if(newPhase==="voting"){
+          setVoteStartToast("⚖️ Oylama başladı!");
+          setTimeout(()=>setVoteStartToast(null),3000);
+        }
+      }
+      lastVotePhaseRef.current=newPhase;
+    });
+    return()=>unsub();
+  },[fb,lobbyCode,round]);
+
   // Yönetici mesaj listener — oyuncuya özel uyarı mesajı geldiğinde küçük pop-up göster
   useEffect(()=>{
     if(!fb||!lobbyCode||isHost||!myPlayer)return;
@@ -2723,10 +2883,9 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
       fb.get(mnRef).then(mnSnap=>{
         if(!mnSnap.exists())return;
         const mn=mnSnap.val();
-        // Sadece death olan haber varsa popup aç
+        // Sabah popup'ı her zaman gösterilir — ölüm olmasa bile "bu gece bir şey yaşanmadı" diye açılır.
         const deaths=(Array.isArray(mn)?mn:[]).filter(n=>n.type==="death");
-        if(deaths.length===0)return;
-        setPendingMorningNews(mn);setShowMorningPopup(true);setMorningRevealedCount(0);seenNoteIdx.current=-1;
+        setPendingMorningNews(mn);setShowMorningPopup(true);setMorningRevealedCount(0);seenActiveIdx.current=-2;
         const myP=players.find(p=>p.ad===myName);
         if(myP&&deaths.some(n=>n.name===myName)&&!lastWordsSent){
           setTimeout(()=>setLastWords({name:myName}),8000);
@@ -2736,8 +2895,9 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     return()=>unsub();
   },[fb,lobbyCode,isHost,myName,lastWordsSent]);
 
-  // Sabah ölüm kartı açma sync — yönetici açtıkça oyuncular inline görür (pop-up YOK); "✓ Kapat"tan sonra ölüm notu kağıdı sırayla gösterilir
-  const seenNoteIdx=useRef(-1);
+  // Sabah ölüm kartı açma sync — yönetici bir ismi açtığı anda o kişinin ölüm notu kağıdı hemen gösterilir (herkese senkron).
+  // Kağıt kapanınca isim listede "açıldı" olarak işaretlenir ve sıradaki isim açılabilir hale gelir.
+  const seenActiveIdx=useRef(-2);
   useEffect(()=>{
     if(!fb||!lobbyCode||isHost)return;
     const mrRef=fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`);
@@ -2745,24 +2905,21 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
       const d=snap.val();
       if(!d){return;}
       if(typeof d.count==="number")setMorningRevealedCount(d.count);
-      if(d.closed){
-        setShowMorningPopup(false);
-        const names=Array.isArray(d.noteNames)?d.noteNames:[];
-        const idx=typeof d.noteIdx==="number"?d.noteIdx:0;
-        if(idx!==seenNoteIdx.current){
-          seenNoteIdx.current=idx;
-          if(idx<names.length){
-            const name=names[idx];
-            setPendingMorningNews(prev=>{
-              const found=prev.find(n=>n.type==="death"&&n.name===name);
-              setActiveDeathNote(found||null);
-              return prev;
-            });
-          } else {
-            setActiveDeathNote(null);
-          }
+      const activeIdx=typeof d.activeIdx==="number"?d.activeIdx:null;
+      if(activeIdx!==seenActiveIdx.current){
+        seenActiveIdx.current=activeIdx;
+        if(activeIdx!=null){
+          setPendingMorningNews(prev=>{
+            const deathsOnly=prev.filter(n=>n.type==="death");
+            const found=deathsOnly[activeIdx];
+            setActiveDeathNote(found||null);
+            return prev;
+          });
+        } else {
+          setActiveDeathNote(null);
         }
       }
+      if(d.allDone){setShowMorningPopup(false);}
     });
     return()=>unsub();
   },[fb,lobbyCode,isHost]);
@@ -2894,7 +3051,7 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     }
   };
 
-  const switchToDay=async(skipFbWrite=false)=>{
+  const switchToDay=async(skipFbWrite=false,freshPlayers=null)=>{
     setTab(t=>t==="vampirchat"?"oyuncular":t);
     setPhase("gündüz");setVoteKey(k=>k+1);setDayKey(k=>k+1);
     // Yönetici için: bu gecenin kısa özetini sabaha taşı (sadece yöneticiye görünür)
@@ -2914,14 +3071,19 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
         const pendingSnap=await fb.get(pendingRef);
         if(pendingSnap.exists()){
           const pdata=pendingSnap.val();
-          let dayUpdated=[...players];
+          // KRİTİK FIX: players state'i burada STALE (bayat) olabilir — çünkü resolveNight
+          // içindeki setPlayers(updated) çağrısı ile bu noktaya kadar React yeniden render
+          // OLMAYABİLİR (host kendi Firebase yayınını dinlemiyor, bkz. yukarıdaki useEffect).
+          // Bu durumda dayUpdated stale players'tan kurulursa, o gece olan TÜM ölümler ve
+          // yetenek hakkı düşüşleri (rahip dahil) burada SIFIRLANIR. freshPlayers varsa ONU kullan.
+          let dayUpdated=[...(freshPlayers||players)];
 
           // Rahip diriltme — gündüzde uygula
           if(pdata.reviveIds&&pdata.reviveIds.length>0){
             pdata.reviveIds.forEach(rid=>{
               const t=dayUpdated.find(p=>p.id===rid);
               if(t){
-                dayUpdated=dayUpdated.map(x=>x.id===rid?{...x,durum:"canlı"}:x);
+                dayUpdated=dayUpdated.map(x=>x.id===rid?{...x,durum:"canlı",lynched:false}:x);
                 log("revive",[mkText("⛪ Rahip → "),mkPlayer(t),mkText(" sabah diriltildi!",{color:T.success})]);
               }
             });
@@ -2960,16 +3122,21 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
       if(mnSnap&&mnSnap.exists()){
         const mn=mnSnap.val();
         const hostDeaths=(Array.isArray(mn)?mn:[]).filter(n=>n.type==="death");
+        const hostRevives=(Array.isArray(mn)?mn:[]).filter(n=>n.type==="revive");
+        // Sabah popup'ı her zaman gösterilir — ölüm olmasa bile "bu gece bir şey yaşanmadı" diye açılır.
+        setPendingMorningNews(mn);setShowMorningPopup(true);setMorningRevealedCount(0);
         if(hostDeaths.length>0){
-          setPendingMorningNews(mn);setShowMorningPopup(true);setMorningRevealedCount(0);
           // Host popup'i manuel kapatir (kart acma akisi bitince)
           // Günlüğe sadece isimler yaz, emoji yok
           const deathNames=hostDeaths.map(n=>n.name);
           log("day_announce",[{t:"text",v:`Bu gece hayatını kaybedenler: ${deathNames.join(", ")}`}]);
-          mn.filter(n=>n.type==="death").forEach(n=>{
+          hostDeaths.forEach(n=>{
             if(n.note){log("day_announce",[{t:"text",v:`📝 ${n.name} ölüm notu: "${n.note}"`,style:{color:T.danger}}]);}
           });
+        } else {
+          log("day_announce",[{t:"text",v:"🌙 Bu gece köyde hiçbir şey yaşanmadı."}]);
         }
+        hostRevives.forEach(n=>{log("day_announce",[{t:"text",v:`✨ ${n.name} gece diriltildi!`,style:{color:T.success}}]);});
       }
     }
 
@@ -2998,8 +3165,8 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     if(onNewGame)onNewGame(players);
   };
 
-  const handleDayStart=()=>{
-    switchToDay(true);
+  const handleDayStart=(freshPlayers)=>{
+    switchToDay(true,freshPlayers);
   };
 
   const setStatus=(id,status,deathNoteText)=>{
@@ -3045,11 +3212,11 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
 
   const handleLynch=(id)=>{
     const p=players.find(x=>x.id===id);
-    const updated=players.map(x=>x.id===id?{...x,durum:"ölü"}:x);
+    const updated=players.map(x=>x.id===id?{...x,durum:"ölü",lynched:true}:x);
     setPlayers(updated);
     log("vote",[mkPlayer(p),mkText(" oylama sonucu idam edildi. ("),mkRole(p.rol),mkText(")")]);
     log("day_announce",[mkPlayer(p),mkText(` ⚖️ oylamayla idam edildi! Rolü: `,{color:T.textSecondary}),mkRole(p.rol)]);
-    if(fb&&lobbyCode){fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/lynchAnnounce`),{name:p.ad,rolAd:p.rol?.ad||"?",rolEmoji:p.rol?.emoji||"⚖️",rolRenk:p.rol?.renk||T.danger,ts:Date.now()});}
+    if(fb&&lobbyCode){fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/lynchAnnounce`),{name:p.ad,rolAd:p.rol?.ad||"?",rolEmoji:p.rol?.emoji||"⚖️",rolRenk:p.rol?.renk||T.danger,rolTakim:p.rol?.takim||"?",ts:Date.now()});}
     // Jester asıldıysa jester kazanır
     if(p.rol?.isJester){
       const reason=`🃏 ${p.ad} oylamayla asıldı! Jester kazandı!`;
@@ -3063,37 +3230,25 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
   };
 
   const resolveNightSafe=async(actions)=>{
-    if(nightResolving)return;
+    if(nightResolving)return null;
     setNightResolving(true);
     try{
-      await resolveNight(actions);
+      return await resolveNight(actions);
     }catch(e){
       console.error("resolveNight error:",e);
       setNightResolving(false);
+      return null;
     }
   };
 
   const resolveNight=async(actions)=>{
     // Engelleme uygula: escort/kabus_vampir tarafından ziyaret edilen kişiler rolünü kullanamaz
     // Mutlak öldürme (ultimate killType) engellemeye takılmaz
-    const blocks=actions.filter(a=>a.tip==="kabus_block");
-    const nonSkipActions=actions.filter(a=>a.tip!=="skip");
-    // Engelleme, sadece SIRADA ÖNCE gerçekleştiyse geçerlidir (rol kullanım önceliği).
-    // Bir rol kendi sırasında hareket ettiyse, ondan sonra sırası gelen bir engelleyici onu artık etkileyemez.
-    const effectiveActions=nonSkipActions.filter(a=>{
-      if(a.tip==="kabus_block")return true; // blok kendisi her zaman geçer
-      const actor=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
-      if(!actor)return true;
-      const aIdx=actions.indexOf(a);
-      const priorBlock=blocks.find(b=>b.targetId===actor.id&&actions.indexOf(b)<aIdx);
-      if(!priorBlock)return true;
-      // Engellendi ama mutlak öldürme veya cadı iksiri ise geçer
-      const rolDef=roles.find(r=>r.id===a.roleId);
-      if(rolDef?.killType==="ultimate")return true;
-      if(a.tip==="witch_kill"||a.tip==="witch_protect")return true; // Cadı iksirleri engellenemez
-      // Engelleme logu
-      log("block",[mkText(`🚫 `),mkPlayer(actor),mkText(` bu gece engellendi — rol kullanamadı!`,{color:T.danger})],true);
-      return false; // engellendi
+    // NOT: computeEffectiveActions, yöneticinin gündüzü başlatmadan önce gördüğü "Gece Özeti" ön izlemesiyle
+    // BİREBİR AYNI fonksiyon — böylece önizleme ile gerçekleşen asla farklı olmaz.
+    const{effectiveActions,blockedOut}=computeEffectiveActions(actions,players,roles);
+    blockedOut.forEach(({actor})=>{
+      log("block",[mkText(`🚫 `),mkPlayer(actor),mkText(` bu gece engellendi, rol kullanamadı!`,{color:T.danger})],true);
     });
     const kills=effectiveActions.filter(a=>["kill","witch_kill"].includes(a.tip)&&a.roleId!=="hirsiz");
     const protects=effectiveActions.filter(a=>["protect","witch_protect"].includes(a.tip));
@@ -3104,7 +3259,7 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
       const killer=k.actorId?players.find(x=>x.id===k.actorId):players.find(x=>x.rol?.id===k.roleId);
       if(k.tip==="kill"&&killer?.rol?.takim==="karanlık"&&p.rol?.isSerialKiller){
         const killerName=killer?.ad||k.roleId;
-        log("protect",[mkText(`🔪 ${killerName} Seri Katil'i hedef aldı — ancak Seri Katil vampirler tarafından öldürülemez! `,{color:T.warning}),mkPlayer(p),mkText(" yaşıyor!")],true);
+        log("protect",[mkText(`🔪 ${killerName} Seri Katil'i hedef aldı, ancak Seri Katil vampirler tarafından öldürülemez! `,{color:T.warning}),mkPlayer(p),mkText(" yaşıyor!")],true);
         return p;
       }
       const isWitchKill=k.tip==="witch_kill";
@@ -3228,11 +3383,14 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     effectiveActions.filter(a=>a.tip==="revive").forEach(a=>{
       const t=players.find(p=>p.id===a.targetId);
       if(t){
-        const rahipIdx=updated.findIndex(x=>x.rol?.id==="rahip");
+        // ÖNEMLİ: actorId varsa MUTLAKA o kullanılmalı — role göre arama, aynı rolden birden fazla
+        // oyuncu olduğunda (ör. iki Rahip) yanlış oyuncunun hakkını düşürüyordu.
+        const rahipIdx=a.actorId?updated.findIndex(x=>x.id===a.actorId):updated.findIndex(x=>x.rol?.id==="rahip");
         if(rahipIdx>=0)updated[rahipIdx]={...updated[rahipIdx],abilityUses:{...updated[rahipIdx].abilityUses,a9:0}};
         // Oyuncuyu HEMEN öldürme (zaten ölü) ama gündüze kadar ölü bırak
         pendingReviveIds.push(a.targetId);
-        log("revive",[mkText("⛪ Rahip gece bir kişiyi seçti — sabah dirilecek.")],true);
+        const rahipName=(a.actorId?players.find(x=>x.id===a.actorId):players.find(x=>x.rol?.id==="rahip"))?.ad||"Rahip";
+        log("revive",[mkText(`⛪ ${rahipName} gece bir kişiyi seçti, sabah dirilecek.`)],true);
       }
     });
 
@@ -3245,12 +3403,14 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
       const t=players.find(p=>p.id===a.targetId);
       const seer=a.actorId?players.find(p=>p.id===a.actorId):players.find(p=>p.rol?.id===a.roleId);
       if(seer&&killedThisNight.has(seer.id))return;
+      // ÖNEMLİ: seer zaten actorId'ye göre bulundu — hakkı da AYNI oyuncudan (seer.id) düşürülmeli,
+      // role göre kör arama değil (aksi halde aynı rolden başka biri varsa onun hakkı yanlışlıkla biter).
       if(seer?.rol?.id==="kadin"){
-        const witchIdx=updated.findIndex(x=>x.rol?.id==="kadin");
+        const witchIdx=updated.findIndex(x=>x.id===seer.id);
         if(witchIdx>=0)updated[witchIdx]={...updated[witchIdx],abilityUses:{...updated[witchIdx].abilityUses,a4:0}};
       }
       if(seer?.rol?.id==="geveze"){
-        const gevezeIdx=updated.findIndex(x=>x.rol?.id==="geveze");
+        const gevezeIdx=updated.findIndex(x=>x.id===seer.id);
         if(gevezeIdx>=0)updated[gevezeIdx]={...updated[gevezeIdx],abilityUses:{...updated[gevezeIdx].abilityUses,a10:0}};
       }
       if(t&&t.rol){
@@ -3291,7 +3451,7 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
         const pendingRef=fb.ref(fb.db,`lobbies/${lobbyCode}/pendingDayActions`);
         Promise.all([
           fb.update(gameRef,{players:updated}),
-          morningNews.length>0?fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningNews`),morningNews):fb.remove(fb.ref(fb.db,`lobbies/${lobbyCode}/morningNews`)),
+          fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningNews`),morningNews.length>0?morningNews:[{type:"none"}]),
           (pendingReviveIds.length>0||pendingReveals.length>0)?fb.set(pendingRef,{reviveIds:pendingReviveIds,reveals:pendingReveals,round}):fb.remove(pendingRef),
         ]).then(()=>resolve()).catch(()=>resolve());
       } else resolve();
@@ -3301,6 +3461,8 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
       setNightResolving(false);
       setNightResolved(true);
     },0);
+    return updated; // KRİTİK: switchToDay bu güncel listeyi almalı — aksi halde stale closure yüzünden
+    // (host kendi Firebase yayınını dinlemediğinden) gece sonuçları (ölümler, yetenek hakları) sıfırlanabilir.
   };
 
   const alive=players.filter(p=>p.durum==="canlı"&&!p.isHost);
@@ -3313,17 +3475,20 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
 
   // Popup/duyuru elementleri — bileşen değil, doğrudan JSX değişkeni olarak tanımla
   // (iç bileşen tanımı React'te her render'da farklı referans oluşturur → error #130)
-  const skipToastEl=skipToast?<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:560,background:"rgba(30,20,60,0.97)",border:`1px solid ${T.accentBorder}`,borderRadius:T.lg,padding:`${T.s8} ${T.s24}`,boxShadow:"0 8px 32px rgba(0,0,0,0.6)",animation:"fadeUp 300ms ease-out",whiteSpace:"nowrap"}}>
+  const skipToastEl=skipToast?ReactDOM.createPortal(<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:560,background:"rgba(30,20,60,0.97)",border:`1px solid ${T.accentBorder}`,borderRadius:T.lg,padding:`${T.s8} ${T.s24}`,boxShadow:"0 8px 32px rgba(0,0,0,0.6)",animation:"fadeUp 300ms ease-out",whiteSpace:"nowrap"}}>
     <span style={{fontSize:13,color:T.accent}}>{skipToast}</span>
-  </div>:null;
-  const hostMsgToastEl=hostMsgToast?<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:565,width:380,maxWidth:"90vw",background:"linear-gradient(160deg,rgba(35,20,65,0.98),rgba(13,10,31,0.98))",border:`1.5px solid ${T.primary}`,borderRadius:T.lg,padding:`${T.s12} ${T.s16}`,boxShadow:`0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px ${T.primaryBorder}`,animation:"fadeUp 300ms ease-out"}}>
+  </div>,document.body):null;
+  const voteStartToastEl=voteStartToast?ReactDOM.createPortal(<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:560,background:"rgba(60,40,10,0.97)",border:`1px solid ${T.primaryBorder}`,borderRadius:T.lg,padding:`${T.s8} ${T.s24}`,boxShadow:"0 8px 32px rgba(0,0,0,0.6)",animation:"fadeUp 300ms ease-out",whiteSpace:"nowrap"}}>
+    <span style={{fontSize:13,color:T.primary,fontWeight:700}}>{voteStartToast}</span>
+  </div>,document.body):null;
+  const hostMsgToastEl=hostMsgToast?ReactDOM.createPortal(<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:565,width:380,maxWidth:"90vw",background:"linear-gradient(160deg,rgba(35,20,65,0.98),rgba(13,10,31,0.98))",border:`1.5px solid ${T.primary}`,borderRadius:T.lg,padding:`${T.s12} ${T.s16}`,boxShadow:`0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px ${T.primaryBorder}`,animation:"fadeUp 300ms ease-out"}}>
     <div style={{display:"flex",alignItems:"center",gap:T.s6,marginBottom:T.s4}}>
       <span style={{fontSize:15}}>👑</span>
       <span style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:13,letterSpacing:1.5,fontWeight:700}}>YÖNETİCİDEN MESAJ</span>
     </div>
     <div style={{fontSize:14,color:T.textPrimary,lineHeight:1.5,wordBreak:"break-word",whiteSpace:"pre-wrap"}}>{hostMsgToast}</div>
-  </div>:null;
-  const contactModalEl=showContactPicker?<div style={{position:"fixed",inset:0,zIndex:700,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center",padding:T.s16}} onClick={()=>{setShowContactPicker(false);setContactTarget(null);setContactText("");}}>
+  </div>,document.body):null;
+  const contactModalEl=showContactPicker?ReactDOM.createPortal(<div style={{position:"fixed",inset:0,zIndex:700,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center",padding:T.s16}} onClick={()=>{setShowContactPicker(false);setContactTarget(null);setContactText("");}}>
     <div onClick={e=>e.stopPropagation()} style={{width:420,maxWidth:"100%",background:"linear-gradient(160deg,rgba(25,15,55,0.98),rgba(10,8,26,0.98))",border:`1px solid ${T.primaryBorder}`,borderRadius:T.lg,padding:T.s20||20,boxShadow:"0 12px 48px rgba(0,0,0,0.7)"}}>
       <div style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:16,letterSpacing:1,marginBottom:T.s12}}>💬 İletişime Geç</div>
       <p style={{fontSize:12,color:T.textMuted,marginBottom:T.s10||10}}>Bir oyuncu seç ve ona küçük bir uyarı mesajı gönder (ör. rolünü kullanmayı unuttu).</p>
@@ -3336,42 +3501,46 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
         <Btn variant="primary" onClick={sendContactMessage} disabled={!contactTarget||!contactText.trim()}>Gönder</Btn>
       </div>
     </div>
-  </div>:null;
+  </div>,document.body):null;
   // Sabah popup: ölüm kartları başta gizli, yönetici tek tek açar
   const deaths=pendingMorningNews.filter(n=>n.type==="death");
   const revives=pendingMorningNews.filter(n=>n.type==="revive");
   const allRevealed=morningRevealedCount>=deaths.length;
 
-  // Sinematik death note: kart açılınca popup tetikle VE Firebase'e yaz ki oyuncular aynı anda görsün
-  const openDeathCard=()=>{
-    if(!isHost||morningRevealedCount>=deaths.length)return;
-    const showingIndex=morningRevealedCount+1; // Bu kart artık "açık" — count bu değere yükselir
-    setMorningRevealedCount(showingIndex);
-    // Firebase'e hemen yaz: oyuncular bu count değerini görünce aynı kartı listede açar (pop-up burada YOK, o "Kapat"tan sonra sırayla gelir)
-    if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`),{count:showingIndex,ts:Date.now()});
+  // Sinematik death note: bir isme basılınca O KİŞİNİN ölüm notu kağıdı hemen açılır (hepsi açılıp gittikten sonra değil).
+  // Kağıt kapanınca sıradaki isim açılabilir hale gelir.
+  const openDeathCard=(idx)=>{
+    if(!isHost||idx==null||idx!==morningRevealedCount||idx>=deaths.length||activeDeathNote)return;
+    const death=deaths[idx];
+    setActiveDeathNote(death);
+    if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`),{count:morningRevealedCount,activeIdx:idx,ts:Date.now()});
   };
   const closeDeathNote=()=>{
     if(isHost){
-      noteIdxRef.current+=1;
-      const names=noteNamesRef.current;
-      const next=noteIdxRef.current<names.length?pendingMorningNews.find(n=>n.type==="death"&&n.name===names[noteIdxRef.current]):null;
-      setActiveDeathNote(next||null);
-      if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`),{count:morningRevealedCount,closed:true,noteNames:names,noteIdx:noteIdxRef.current,ts:Date.now()});
+      const newCount=morningRevealedCount+1;
+      const allDone=newCount>=deaths.length;
+      setMorningRevealedCount(newCount);
+      setActiveDeathNote(null);
+      if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`),{count:newCount,activeIdx:null,allDone,ts:Date.now()});
+      if(allDone)setShowMorningPopup(false);
     } else {
       setActiveDeathNote(null);
     }
   };
 
-  const morningPopupEl=showMorningPopup&&pendingMorningNews.length>0?<div style={{position:"fixed",inset:0,zIndex:600,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,0.75)",backdropFilter:"blur(8px)",animation:"fadeIn 300ms ease-out"}}>
+  const morningPopupEl=showMorningPopup&&pendingMorningNews.length>0?ReactDOM.createPortal(<div style={{position:"fixed",inset:0,zIndex:600,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,0.75)",backdropFilter:"blur(8px)",animation:"fadeIn 300ms ease-out"}}>
     <div style={{background:"linear-gradient(160deg,rgba(30,10,10,0.98),rgba(13,10,31,0.98))",border:`1px solid ${T.dangerBorder}`,borderRadius:T.lg,padding:T.s24,maxWidth:400,width:"92%",textAlign:"center",boxShadow:"0 16px 64px rgba(0,0,0,0.8)",animation:"fadeUp 300ms ease-out"}}>
       <div style={{fontSize:44,marginBottom:T.s8}}>🌅</div>
       <div style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:18,letterSpacing:3,marginBottom:T.s4}}>Sabah Oldu</div>
       {deaths.length>0&&<div style={{fontSize:13,color:T.danger,fontWeight:700,marginBottom:T.s16,background:T.dangerDim,border:`1px solid ${T.dangerBorder}`,borderRadius:T.md,padding:`${T.s6} ${T.s12}`}}>💀 Bu gece {deaths.length} kişi öldü</div>}
+      {deaths.length===0&&revives.length===0&&<div style={{fontSize:13,color:T.textSecondary,fontWeight:700,marginBottom:T.s16,background:"rgba(255,255,255,0.04)",border:`1px solid ${T.border}`,borderRadius:T.md,padding:`${T.s6} ${T.s12}`}}>🌙 Bu gece köyde hiçbir şey yaşanmadı.</div>}
       <div style={{display:"flex",flexDirection:"column",gap:T.s8,marginBottom:T.s16}}>
         {deaths.map((n,i)=>{
           const revealed=i<morningRevealedCount;
-          return <div key={i} onClick={!revealed&&isHost&&i===morningRevealedCount?openDeathCard:undefined}
-            style={{background:revealed?T.dangerDim:"rgba(255,255,255,0.04)",border:`1px solid ${revealed?T.dangerBorder:"rgba(255,255,255,0.08)"}`,borderRadius:T.md,padding:`${T.s12} ${T.s16}`,textAlign:"left",cursor:isHost&&i===morningRevealedCount&&!revealed?"pointer":"default",transition:"all 0.3s ease",position:"relative",overflow:"hidden"}}>
+          const isNext=i===morningRevealedCount;
+          const isOpening=isNext&&!!activeDeathNote;
+          return <div key={i} onClick={isNext&&!revealed&&!isOpening?()=>openDeathCard(i):undefined}
+            style={{background:revealed?T.dangerDim:"rgba(255,255,255,0.04)",border:`1px solid ${revealed?T.dangerBorder:"rgba(255,255,255,0.08)"}`,borderRadius:T.md,padding:`${T.s12} ${T.s16}`,textAlign:"left",cursor:isHost&&isNext&&!revealed&&!isOpening?"pointer":"default",transition:"all 0.3s ease",position:"relative",overflow:"hidden"}}>
             {revealed?(<>
               <div style={{display:"flex",alignItems:"center",gap:T.s8,animation:"fadeUp 300ms ease-out"}}>
                 <span style={{fontSize:20}}>💀</span>
@@ -3381,9 +3550,9 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
             </>):(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
               <div style={{display:"flex",alignItems:"center",gap:T.s8}}>
                 <span style={{fontSize:20}}>❓</span>
-                <span style={{fontWeight:700,color:"rgba(255,255,255,0.25)",fontSize:13,letterSpacing:2}}>??? Gizli</span>
+                <span style={{fontWeight:700,color:"rgba(255,255,255,0.25)",fontSize:13,letterSpacing:2}}>{isOpening?"Açılıyor...":"??? Gizli"}</span>
               </div>
-              {isHost&&i===morningRevealedCount&&<span style={{fontSize:11,color:T.accent,border:`1px solid ${T.accentBorder}`,borderRadius:20,padding:"2px 8px",animation:"pulse 1.2s ease infinite"}}>🩸 Aç ▶</span>}
+              {isHost&&isNext&&!isOpening&&<span style={{fontSize:11,color:T.accent,border:`1px solid ${T.accentBorder}`,borderRadius:20,padding:"2px 8px",animation:"pulse 1.2s ease infinite"}}>🩸 Aç ▶</span>}
             </div>)}
           </div>;
         })}
@@ -3391,38 +3560,43 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
           <span style={{fontSize:20}}>✨</span><span style={{fontWeight:700,color:T.success}}>{n.name} hayata döndü!</span>
         </div>)}
       </div>
-      {isHost&&allRevealed&&<button onClick={()=>{
-        setShowMorningPopup(false);
-        noteNamesRef.current=deaths.map(d=>d.name);
-        noteIdxRef.current=0;
-        setActiveDeathNote(deaths.length>0?deaths[0]:null);
-        if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`),{count:morningRevealedCount,closed:true,noteNames:noteNamesRef.current,noteIdx:0,ts:Date.now()});
-      }} style={{width:"100%",padding:`${T.s10||"10px"} 0`,borderRadius:T.md,border:`1px solid ${T.border}`,background:T.surface,color:T.textSecondary,fontWeight:700,fontSize:13,cursor:"pointer"}}>✓ Kapat</button>}
-      {isHost&&!allRevealed&&<p style={{fontSize:11,color:T.textMuted}}>🩸 Kartların üstüne basarak tek tek aç</p>}
+      {isHost&&allRevealed&&<button onClick={()=>{setShowMorningPopup(false);if(fb&&lobbyCode)fb.set(fb.ref(fb.db,`lobbies/${lobbyCode}/morningReveal`),{count:morningRevealedCount,activeIdx:null,allDone:true,ts:Date.now()});}} style={{width:"100%",padding:`${T.s10||"10px"} 0`,borderRadius:T.md,border:`1px solid ${T.border}`,background:T.surface,color:T.textSecondary,fontWeight:700,fontSize:13,cursor:"pointer"}}>✓ Kapat</button>}
+      {isHost&&!allRevealed&&<p style={{fontSize:11,color:T.textMuted}}>🩸 Kartların üstüne basarak tek tek aç, her kağıt kapanınca sıradaki açılır</p>}
       {!isHost&&<p style={{fontSize:11,color:T.textMuted}}>Yönetici açıyor...</p>}
     </div>
-  </div>:null;
+  </div>,document.body):null;
 
   const activeDeathNoteEl=activeDeathNote?<DeathNotePopup death={activeDeathNote} onClose={closeDeathNote} isHost={isHost}/>:null;
-  const lastWordsEl=lastWords&&!lastWordsSent&&!isHost?<div style={{position:"fixed",inset:0,zIndex:650,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,0.85)",backdropFilter:"blur(8px)",animation:"fadeIn 300ms ease-out"}}>
+  const lastWordsEl=lastWords&&!lastWordsSent&&!isHost?ReactDOM.createPortal(<div style={{position:"fixed",inset:0,zIndex:650,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,0.85)",backdropFilter:"blur(8px)",animation:"fadeIn 300ms ease-out"}}>
     <div style={{background:"linear-gradient(160deg,rgba(50,10,10,0.98),rgba(13,10,31,0.98))",border:`1px solid ${T.dangerBorder}`,borderRadius:T.lg,padding:T.s24,maxWidth:380,width:"90%",textAlign:"center",boxShadow:"0 16px 64px rgba(0,0,0,0.8)",animation:"fadeUp 300ms ease-out"}}>
       <div style={{fontSize:48,marginBottom:T.s12}}>💀</div>
       <div style={{fontFamily:"'IM Fell English',serif",color:T.danger,fontSize:18,letterSpacing:2,marginBottom:T.s8}}>Son Sözlerin</div>
       <p style={{fontSize:13,color:T.textSecondary,marginBottom:T.s16}}>Bu sabah öldüğün açıklandı. Tüm oyunculara iletmek istediğin son sözlerini yaz.</p>
       <LastWordsInput name={myName} lobbyCode={lobbyCode} fb={fb} onSent={()=>{setLastWordsSent(true);setLastWords(null);}}/>
     </div>
-  </div>:null;
-  const lynchAnnounceEl=lynchAnnounce?<div style={{position:"fixed",bottom:80,left:"50%",transform:"translateX(-50%)",zIndex:550,background:"linear-gradient(135deg,rgba(50,10,10,0.97),rgba(13,10,31,0.97))",border:`1px solid ${T.dangerBorder}`,borderRadius:T.lg,padding:`${T.s12} ${T.s24}`,boxShadow:"0 8px 32px rgba(0,0,0,0.6)",animation:"fadeUp 300ms ease-out",maxWidth:380,textAlign:"center"}}>
-    <span style={{fontSize:16}}>⚖️</span><span style={{fontFamily:"'IM Fell English',serif",color:T.danger,fontSize:15,marginLeft:T.s8}}>{lynchAnnounce.name} idam edildi!</span>
-    <div style={{marginTop:T.s4,display:"flex",justifyContent:"center",gap:T.s4}}><Tag color={lynchAnnounce.rolRenk||T.danger} size="sm">{lynchAnnounce.rolEmoji} {lynchAnnounce.rolAd}</Tag></div>
-  </div>:null;
-  const lastWordsToastEl=lastWordsToast?<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:570,background:"linear-gradient(135deg,rgba(40,20,0,0.97),rgba(13,10,31,0.97))",border:`1px solid ${T.primaryBorder}`,borderRadius:T.lg,padding:`${T.s12} ${T.s24}`,boxShadow:"0 8px 32px rgba(0,0,0,0.7)",animation:"fadeUp 300ms ease-out",maxWidth:420,textAlign:"center",minWidth:240}}>
+  </div>,document.body):null;
+  // İdam edilen kişi için tam ekran "köye veda etti" popup'ı — rolü açıkça gösterir.
+  // isHost hariç herkese gösterilir (yönetici zaten oylama panelinde rolü görür).
+  const lynchAnnounceEl=lynchAnnounce?ReactDOM.createPortal(<div style={{position:"fixed",inset:0,zIndex:610,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,0.82)",backdropFilter:"blur(10px)",animation:"fadeIn 300ms ease-out"}} onClick={()=>setLynchAnnounce(null)}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"linear-gradient(160deg,rgba(50,10,10,0.98),rgba(13,10,31,0.98))",border:`1px solid ${T.dangerBorder}`,borderRadius:T.lg,padding:T.s24,maxWidth:380,width:"90%",textAlign:"center",boxShadow:"0 16px 64px rgba(0,0,0,0.8)",animation:"fadeUp 300ms ease-out"}}>
+      <div style={{fontSize:52,marginBottom:T.s12}}>⚖️</div>
+      <div style={{fontFamily:"'IM Fell English',serif",color:T.textPrimary,fontSize:22,letterSpacing:1,marginBottom:T.s8}}>{lynchAnnounce.name}</div>
+      <p style={{fontSize:14,color:T.danger,fontWeight:700,marginBottom:T.s4}}>Halkın oyuyla idam edildi.</p>
+      <p style={{fontSize:13,color:T.textMuted,fontStyle:"italic",marginBottom:T.s16}}>Köye veda etti...</p>
+      <div style={{background:(lynchAnnounce.rolRenk||T.danger)+"1e",border:`1.5px solid ${lynchAnnounce.rolRenk||T.danger}`,borderRadius:T.lg,padding:`${T.s16} ${T.s16}`,display:"flex",flexDirection:"column",alignItems:"center",gap:T.s4}}>
+        <span style={{fontSize:40}}>{lynchAnnounce.rolEmoji}</span>
+        <span style={{fontFamily:"'IM Fell English',serif",fontSize:20,fontWeight:700,letterSpacing:1,color:lynchAnnounce.rolRenk||T.danger}}>{lynchAnnounce.rolAd}</span>
+        {lynchAnnounce.rolTakim&&<span style={{fontSize:11,color:T.textMuted,letterSpacing:1,textTransform:"uppercase"}}>{TEAMS[lynchAnnounce.rolTakim]?.label||lynchAnnounce.rolTakim}</span>}
+      </div>
+    </div>
+  </div>,document.body):null;
+  const lastWordsToastEl=lastWordsToast?ReactDOM.createPortal(<div style={{position:"fixed",top:80,left:"50%",transform:"translateX(-50%)",zIndex:570,background:"linear-gradient(135deg,rgba(40,20,0,0.97),rgba(13,10,31,0.97))",border:`1px solid ${T.primaryBorder}`,borderRadius:T.lg,padding:`${T.s12} ${T.s24}`,boxShadow:"0 8px 32px rgba(0,0,0,0.7)",animation:"fadeUp 300ms ease-out",maxWidth:420,textAlign:"center",minWidth:240}}>
     <div style={{display:"flex",alignItems:"center",gap:T.s8,justifyContent:"center",marginBottom:T.s4}}>
       <span style={{fontSize:18}}>💬</span>
-      <span style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:14}}>{lastWordsToast.name} — Son Sözler</span>
+      <span style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:14}}>{lastWordsToast.name}: Son Sözler</span>
     </div>
     <p style={{fontSize:13,color:T.textPrimary,fontStyle:"italic",lineHeight:1.5}}>"{lastWordsToast.words}"</p>
-  </div>:null;
+  </div>,document.body):null;
   const gevezeAnnounceEl=gevezeAnnounce?<GlassCard style={{padding:T.s12,marginBottom:T.s12,border:`1px solid ${T.accentBorder}`,background:"rgba(167,139,250,0.07)"}}>
     <div style={{display:"flex",alignItems:"center",gap:T.s8}}>
       <span style={{fontSize:18}}>🗣️</span>
@@ -3499,7 +3673,7 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
 
   if(isHost&&!gameOver){
     return <div style={{padding:T.s16,maxWidth:1200,margin:"0 auto"}}>
-      {morningPopupEl}{activeDeathNoteEl}{lynchAnnounceEl}{gevezeAnnounceEl}{baskanAnnounceEl}{skipToastEl}{lastWordsToastEl}{contactModalEl}
+      {morningPopupEl}{activeDeathNoteEl}{lynchAnnounceEl}{gevezeAnnounceEl}{baskanAnnounceEl}{skipToastEl}{lastWordsToastEl}{contactModalEl}{voteStartToastEl}
       <PhaseFlash phase={phaseFlash}/>
       {/* Header */}
       <div className="enter" style={{marginBottom:T.s12,padding:`${T.s12} ${T.s16}`,borderRadius:T.lg,background:night?"linear-gradient(135deg,rgba(30,15,80,0.9),rgba(88,50,200,0.2))":"linear-gradient(135deg,rgba(80,40,0,0.8),rgba(243,156,18,0.15))",border:`1px solid ${activeBorder}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:T.s8}}>
@@ -3615,7 +3789,7 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
 
 
   return <div style={{padding:T.s16,maxWidth:700,margin:"0 auto"}}>
-    {morningPopupEl}{activeDeathNoteEl}{lynchAnnounceEl}{lastWordsEl}{lastWordsToastEl}{hostMsgToastEl}
+    {morningPopupEl}{activeDeathNoteEl}{lynchAnnounceEl}{lastWordsEl}{lastWordsToastEl}{hostMsgToastEl}{voteStartToastEl}
     <PhaseFlash phase={phaseFlash}/>
     <div className="enter" style={{marginBottom:T.s16,padding:`${T.s12} ${T.s16}`,borderRadius:T.lg,background:night?"linear-gradient(135deg,rgba(30,15,80,0.85),rgba(88,50,200,0.15))":"linear-gradient(135deg,rgba(80,40,0,0.7),rgba(243,156,18,0.12))",border:`1px solid ${activeBorder}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:T.s8}}>
       <div style={{display:"flex",alignItems:"center",gap:T.s8,flexWrap:"wrap"}}>
@@ -3638,15 +3812,20 @@ function GameScreen({players:initP,nightOrder,secretRoleMode,roles,onEnd,onPhase
     </GlassCard>}
 
     {!isHost&&!isSpectator&&myPlayer&&myPlayer.durum==="canlı"&&<GlassCard style={{padding:T.s16,marginBottom:T.s16,border:`1px solid ${myPlayer.rol?.renk+"55"||T.border}`}}>
-      <div style={{display:"flex",alignItems:"center",gap:T.s12}}>
-        <div style={{width:52,height:52,borderRadius:T.md,background:myPlayer.rol?.renk+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,border:`1px solid ${myPlayer.rol?.renk+"55"}`}}>{myPlayer.rol?.emoji}</div>
-        <div>
+      <div onClick={()=>setRoleDescOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:T.s12,cursor:"pointer"}}>
+        <div style={{width:52,height:52,borderRadius:T.md,background:myPlayer.rol?.renk+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,border:`1px solid ${myPlayer.rol?.renk+"55"}`,flexShrink:0}}>{myPlayer.rol?.emoji}</div>
+        <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:11,color:T.textMuted,letterSpacing:2,marginBottom:T.s4}}>SENİN ROLÜN</div>
-          <div style={{fontFamily:"'IM Fell English',serif",fontSize:18,color:myPlayer.rol?.renk||T.primary}}>{myPlayer.rol?.ad}</div>
-          <div style={{fontSize:12,color:T.textSecondary,marginTop:T.s4}}>{myPlayer.rol?.aciklama}</div>
+          <div style={{display:"flex",alignItems:"center",gap:T.s6}}>
+            <span style={{fontFamily:"'IM Fell English',serif",fontSize:18,color:myPlayer.rol?.renk||T.primary}}>{myPlayer.rol?.ad}</span>
+            <span title="Rol açıklamasını göster" style={{fontSize:10,color:T.textMuted,border:`1px solid ${T.border}`,borderRadius:20,width:18,height:18,display:"inline-flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:`transform ${T.fast}`,transform:roleDescOpen?"rotate(180deg)":"none"}}>▼</span>
+          </div>
         </div>
-        <div style={{marginLeft:"auto"}}><Pill label={TEAMS[myPlayer.rol?.takim]?.label} color={TEAMS[myPlayer.rol?.takim]?.color}/></div>
+        <div style={{marginLeft:"auto",flexShrink:0}}><Pill label={TEAMS[myPlayer.rol?.takim]?.label} color={TEAMS[myPlayer.rol?.takim]?.color}/></div>
       </div>
+      {roleDescOpen&&<div style={{marginTop:T.s12,paddingTop:T.s12,borderTop:`1px solid ${T.border}`,animation:"fadeUp 200ms ease-out"}}>
+        <p style={{fontSize:12,color:T.textSecondary,margin:0,lineHeight:1.6}}>{myPlayer.rol?.aciklama}</p>
+      </div>}
     </GlassCard>}
 
     {!isHost&&!isSpectator&&myPlayer&&myPlayer.durum==="ölü"&&<GlassCard style={{padding:T.s12,marginBottom:T.s16,border:`1px solid ${T.dangerBorder}`,background:T.dangerDim,textAlign:"center"}}>
@@ -3768,7 +3947,7 @@ function ReplayScreen({lobbyCode,replayData,onBack}){
       <div style={{fontFamily:"'IM Fell English',serif",color:T.primary,fontSize:16,letterSpacing:3,marginBottom:T.s4}}>Oyun Tekrarı</div>
       {endedAt&&<p style={{color:T.textMuted,fontSize:12}}>🕐 {endedAt} tarihinde sona erdi</p>}
       <div style={{marginTop:T.s16,display:"inline-flex",alignItems:"center",gap:T.s6,background:"rgba(231,76,60,0.12)",border:"1px solid rgba(231,76,60,0.3)",borderRadius:20,padding:"4px 14px"}}>
-        <span style={{fontSize:11,color:T.danger,fontWeight:700,letterSpacing:2}}>🚫 SALT OKUNUR — OYNANAMAZ</span>
+        <span style={{fontSize:11,color:T.danger,fontWeight:700,letterSpacing:2}}>🚫 SALT OKUNUR, OYNANAMAZ</span>
       </div>
     </GlassCard>
 
@@ -3945,7 +4124,7 @@ function SetupWaitingScreen({lobbyCode,myName}){
 
       {secretRoleMode&&<div style={{display:"flex",alignItems:"center",gap:T.s8,justifyContent:"center",background:"rgba(167,139,250,0.08)",border:`1px solid ${T.accentBorder}`,borderRadius:T.md,padding:`${T.s8} ${T.s12}`,marginBottom:T.s16}}>
         <span style={{fontSize:14}}>🕵️</span>
-        <span style={{fontSize:12,color:T.accent,fontWeight:700}}>Gizli Rol Modu aktif. Roller sana da gösterilmeyecek</span>
+        <span style={{fontSize:12,color:T.accent,fontWeight:700}}>Gizli Rol Modu aktif, roller sana da gösterilmeyecek</span>
       </div>}
 
       {/* Rol dağılımı — anlık */}
