@@ -263,6 +263,16 @@ function RIcon({role,size=20,radius="30%"}){
   const src=`${ROLE_ICON_DIR}${role.id}.${ROLE_ICON_EXTS[extIdx]}`;
   return <img src={src} alt={role?.ad||""} onError={()=>setExtIdx(i=>i+1)} style={{width:size,height:size,minWidth:size,borderRadius:radius,objectFit:"cover",display:"inline-block",verticalAlign:"middle",flexShrink:0}}/>;
 }
+// Rolü henüz belli olmayan/gösterilmeyen oyuncular için genel kullanıcı ikonu.
+// icons/kullanici.png (yoksa .svg/.jpg/.jpeg/.webp) arar, bulamazsa 👤 emojisine döner.
+function UIcon({size=20,radius="30%"}){
+  const[extIdx,setExtIdx]=useState(0);
+  if(extIdx>=ROLE_ICON_EXTS.length){
+    return <span style={{fontSize:size,lineHeight:1,display:"inline-block",verticalAlign:"middle",flexShrink:0}}>👤</span>;
+  }
+  const src=`${ROLE_ICON_DIR}kullanici.${ROLE_ICON_EXTS[extIdx]}`;
+  return <img src={src} alt="" onError={()=>setExtIdx(i=>i+1)} style={{width:size,height:size,minWidth:size,borderRadius:radius,objectFit:"cover",display:"inline-block",verticalAlign:"middle",flexShrink:0}}/>;
+}
 function FocusInput({value,onChange,placeholder,style,rows,onKeyDown,maxLength,type}){
   const[foc,setFoc]=useState(false);
   const s={background:"rgba(255,255,255,0.05)",border:`1px solid ${foc?T.accent:T.border}`,borderRadius:T.md,padding:`${T.s12} ${T.s16}`,color:T.textPrimary,fontSize:14,outline:"none",width:"100%",boxShadow:foc?`0 0 0 2px ${T.accent}33`:"none",transition:`border-color ${T.base},box-shadow ${T.base}`,...style};
@@ -475,7 +485,7 @@ function PlayerCard({player,onStatus,onAnnounce,onKick,phase,isHost,isOnline}){
     <GlassCard style={{padding:`${T.s12} ${T.s16}`,border:`1px solid ${isDead?"rgba(255,255,255,0.04)":isDisconnected?"rgba(231,76,60,0.25)":phase==="gece"?T.accentBorder:T.border}`}}>
       <div style={{display:"flex",alignItems:"center",gap:T.s12}}>
         <div style={{position:"relative",flexShrink:0}}>
-          <div style={{width:42,height:42,borderRadius:T.md,background:avatarBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,border:avatarBorder}}>{isDead?"💀":isHost?player.rol?.emoji:"👤"}</div>
+          <div style={{width:42,height:42,borderRadius:T.md,background:avatarBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,border:avatarBorder,overflow:"hidden"}}>{isDead?"💀":isHost?<RIcon role={player.rol} size={30} radius="8px"/>:<UIcon size={26} radius="8px"/>}</div>
           {!isDead&&<div style={{position:"absolute",bottom:-2,right:-2,width:10,height:10,borderRadius:"50%",background:isDisconnected?"#e74c3c":"#27ae60",border:"2px solid #0d0a1f"}}/>}
         </div>
         <div style={{flex:1,minWidth:0}}>
@@ -1927,7 +1937,7 @@ function NightActionQueue({players,nightOrder,roles,onResolve,onDayStart,nightNu
               display:"flex",justifyContent:"space-between",alignItems:"center",
               transition:`all ${T.fast}`}}>
             <div style={{display:"flex",alignItems:"center",gap:T.s8}}>
-              <span style={{fontSize:18}}>{p.rol?.emoji||"👤"}</span>
+              {p.rol?<RIcon role={p.rol} size={18}/>:<UIcon size={18}/>}
               <span>{p.ad}</span>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:T.s6}}>
@@ -2009,7 +2019,7 @@ function LobbyWaiting({lobbyCode,players,spectators,isHost,myName,onStartSetup})
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:T.s8}}>
         {players.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:T.s12,background:"rgba(255,255,255,0.03)",borderRadius:T.md,padding:`${T.s12} ${T.s16}`,border:`1px solid ${p.name===myName?T.accentBorder:T.border}`}}>
-          <div style={{width:32,height:32,borderRadius:"50%",background:p.isHost?T.primaryDim:T.accentDim,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{p.isHost?"👑":"👤"}</div>
+          <div style={{width:32,height:32,borderRadius:"50%",background:p.isHost?T.primaryDim:T.accentDim,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,overflow:"hidden"}}>{p.isHost?"👑":<UIcon size={24} radius="50%"/>}</div>
           <span style={{fontWeight:700,color:p.name===myName?T.accent:T.textPrimary,flex:1}}>{p.name}</span>
           {p.name===myName&&<Tag color={T.accent} size="sm">Sen</Tag>}
           {p.isHost&&<Tag color={T.primary} size="sm">Kurucu</Tag>}
